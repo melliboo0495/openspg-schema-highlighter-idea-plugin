@@ -19,6 +19,7 @@ import org.openspg.idea.schema.SchemaFileType;
 
 import java.util.Collection;
 
+// TODO
 class SchemaCreatePropertyQuickFix extends BaseIntentionAction {
 
     private final String key;

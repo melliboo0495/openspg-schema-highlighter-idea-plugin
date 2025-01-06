@@ -4,7 +4,8 @@ import com.intellij.formatting.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 
-final class SchemaFormattingModelBuilder implements FormattingModelBuilder {
+// TODO
+public final class SchemaFormattingModelBuilder implements FormattingModelBuilder {
 
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
         //return new SpacingBuilder(settings, SchemaLanguage.INSTANCE)

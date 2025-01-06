@@ -6,7 +6,8 @@ import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.schema.SchemaLanguage;
 
-final class SchemaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
+// TODO
+public final class SchemaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
 
     @NotNull
     @Override

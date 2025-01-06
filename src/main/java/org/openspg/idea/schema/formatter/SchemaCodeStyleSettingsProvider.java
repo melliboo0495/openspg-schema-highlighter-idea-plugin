@@ -10,7 +10,8 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.schema.SchemaLanguage;
 
-final class SchemaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
+// TODO
+public final class SchemaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
 
     @Override
     public CustomCodeStyleSettings createCustomSettings(@NotNull CodeStyleSettings settings) {
