@@ -27,33 +27,10 @@ import com.intellij.psi.tree.IElementType;
      */
     private int myBraceCount = 0;
 
-    /** A token type of parsed block scalar */
-    private IElementType myBlockScalarType = null;
-
-    /** A state to be returned in (or it is used to calculate next state) */
-    private int myReturnState = YYINITIAL;
-
-    private int[] indentLevelPos = {0, 0, 0, 0, 0, 0};
-    private int[] indentLevelState = {ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE};
-    private int maxIndentLevel = 6;
+    private final int[] indentPos = {0, 0, 0, 0, 0, 0};
+    private final int[] indentState = {ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE};
+    private final int maxIndentLevel = 6;
     private int currentIndentLevel = 0;
-
-    //-------------------------------------------------------------------------------------------------------------------
-
-    public boolean isCleanState() {
-        return yystate() == YYINITIAL
-           && myBraceCount == 0;
-    }
-
-    public void cleanMyState() {
-        myBraceCount = 0;
-        myBlockScalarType = null;
-
-        yycolumn = 0;
-        myReturnState = YYINITIAL;
-
-        yybegin(YYINITIAL);
-    }
 
     //-------------------------------------------------------------------------------------------------------------------
 
@@ -68,43 +45,37 @@ import com.intellij.psi.tree.IElementType;
         return prev == (char)-1 || prev == '\n';
     }
 
-    private IElementType getWhitespaceType() {
-        return isAfterEol() ? INDENT : WHITESPACE;
-    }
-
     private int getIndentState() {
         assert isAfterEol();
-        int indentPos = yylength();
+        int currentIndentPos = yylength();
         for (int i = 0; i < yylength(); i+=1) {
             if (getCharAtOffset(i) == '\t') {
-                indentPos += 1;
+                currentIndentPos += 1;
             }
         }
 
-        int lastIndentPos = this.indentLevelPos[this.currentIndentLevel];
-        if (indentPos > lastIndentPos) {
+        int lastIndentPos = this.indentPos[this.currentIndentLevel];
+        //trace("=================");
+        //System.out.println("lastIndentPos: " + lastIndentPos);
+        //System.out.println("currentIndentPos: " + currentIndentPos);
+        if (currentIndentPos > lastIndentPos) {
             if (this.currentIndentLevel == maxIndentLevel) {
                 return LEVEL_ERROR;
             }
             this.currentIndentLevel ++;
-            this.indentLevelPos[this.currentIndentLevel] = indentPos;
-            return this.indentLevelState[this.currentIndentLevel];
+            this.indentPos[this.currentIndentLevel] = currentIndentPos;
+            return this.indentState[this.currentIndentLevel];
 
-        } else if (indentPos < lastIndentPos) {
+        } else if (currentIndentPos < lastIndentPos) {
             for (int i = 0; i < this.currentIndentLevel; i++) {
-                if (this.indentLevelPos[i] == indentPos) {
+                if (this.indentPos[i] == currentIndentPos) {
                     this.currentIndentLevel = i;
-                    return this.indentLevelState[this.currentIndentLevel];
+                    return this.indentState[this.currentIndentLevel];
                 }
             }
             return LEVEL_ERROR;
         }
-        return this.indentLevelState[this.currentIndentLevel];
-    }
-
-    private void goToState(int state) {
-        yybegin(state);
-        yypushback(yylength());
+        return this.indentState[this.currentIndentLevel];
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -120,7 +91,7 @@ import com.intellij.psi.tree.IElementType;
             myBraceCount--;
         }
         if (myBraceCount == 0){
-            yybegin(this.indentLevelState[this.currentIndentLevel]);
+            yybegin(this.indentState[this.currentIndentLevel]);
         }
     }
 
@@ -146,7 +117,7 @@ EOL =                           "\n"
 WHITE_SPACE_CHAR =              [ \t]
 WHITE_SPACE =                   {WHITE_SPACE_CHAR}+
 
-NAME =                          [a-zA-Z][a-zA-Z0-9]*
+NAME =                          (!(!{NS_CHAR}|{NS_INDICATOR}))+
 
 LINE =                          [^\n]*
 
@@ -185,7 +156,9 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 <YYINITIAL, LINE_START_STATE> {
     // It is a text, go next state and process it there
     "namespace" {
-          goToState(NAMESPACE_STATE);
+          this.currentIndentLevel = 0;
+          yybegin(NAMESPACE_STATE);
+          yypushback(yylength());
       }
 
     {WHITE_SPACE} {
@@ -194,6 +167,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^] {
+          this.currentIndentLevel = 0;
           yybegin(ENTITY_STATE);
           yypushback(yylength());
       }
@@ -300,7 +274,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 
 // level-2 mata-info
 <META_STATE, ATTRMETA_STATE, SUBPROPMETA_STATE> {
-    "desc" | "properties" | "relations" | "hypernymPredicate" | "constraint" | "rule" {
+    "desc" | "properties" | "relations" | "hypernymPredicate" | "constraint" | "rule" | "index" {
           if (yystate() == ATTRMETA_STATE) {
               return ATTRMETA_TYPE;
 
