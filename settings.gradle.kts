@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "openspg-schema-idea-plugin"
+rootProject.name = "openspg-schema-highlighter-idea-plugin"
