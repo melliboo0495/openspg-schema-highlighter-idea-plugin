@@ -8,6 +8,8 @@ import org.openspg.idea.lang.psi.SchemaEntityInfo;
 import org.openspg.idea.lang.psi.SchemaEntityMeta;
 import org.openspg.idea.lang.psi.SchemaNamespace;
 
+import java.util.List;
+
 public class SchemaPsiImplUtil {
 
     public static String getValue(SchemaNamespace element) {
@@ -41,18 +43,21 @@ public class SchemaPsiImplUtil {
         }
     }
 
-    public static String getEntityType(SchemaEntityInfo element) {
-        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_TYPE);
-        if (valueNode != null) {
-            return unwrapText(valueNode.getText());
-        }
-
-        valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_BUILDIN_TYPE);
-        if (valueNode != null) {
-            return unwrapText(valueNode.getText());
-        } else {
-            return null;
-        }
+    public static List<String> getEntityClassList(SchemaEntityInfo element) {
+        ////List<String> classList = new ArrayList<String>();
+        ////
+        ////Collection<PsiElement> elements = PsiTreeUtil.findChildOfAnyType(element, SchemaTypes.ENTITY_BUILDIN_CLASS);
+        ////if (valueNode != null) {
+        ////    classList.add(unwrapText(valueNode.getText()));
+        ////}
+        ////
+        ////valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_CLASS);
+        ////if (valueNode != null) {
+        ////    classList.add(unwrapText(valueNode.getText()));
+        ////}
+        //return classList;
+        //TODO
+        return null;
     }
 
     public static String getName(SchemaEntityInfo element) {

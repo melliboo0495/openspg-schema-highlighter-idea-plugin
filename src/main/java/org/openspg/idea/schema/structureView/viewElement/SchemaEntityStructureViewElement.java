@@ -30,7 +30,7 @@ public class SchemaEntityStructureViewElement extends SchemaStructureViewElement
         SchemaEntityInfo info = element.getEntityInfo();
         return new PresentationData(
                 info.getEntityName(),
-                info.getEntityType() + ": " + info.getEntityAliasName(),
+                info.getEntityAliasName(),
                 AllIcons.Nodes.Class,
                 null
         );

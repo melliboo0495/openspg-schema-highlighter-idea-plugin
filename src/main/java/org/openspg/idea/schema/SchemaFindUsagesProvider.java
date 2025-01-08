@@ -63,7 +63,7 @@ public class SchemaFindUsagesProvider implements FindUsagesProvider {
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
         if (element instanceof SchemaEntityInfo info) {
-            return info.getEntityName() + ":" + info.getEntityType();
+            return info.getEntityName() + ":" + info.getEntityClassList();
         }
         return "";
     }

@@ -30,12 +30,13 @@ public interface SchemaTypes {
   IElementType CLOSE_BRACKET = new SchemaTokenType("CLOSE_BRACKET");
   IElementType CLOSE_PLAIN_BLOCK = new SchemaTokenType("CLOSE_PLAIN_BLOCK");
   IElementType COLON = new SchemaTokenType("COLON");
+  IElementType COMMA = new SchemaTokenType("COMMA");
   IElementType COMMENT = new SchemaTokenType("COMMENT");
   IElementType DOCUMENT_END = new SchemaTokenType("DOCUMENT_END");
   IElementType ENTITY_ALIAS_NAME = new SchemaTokenType("ENTITY_ALIAS_NAME");
-  IElementType ENTITY_BUILDIN_TYPE = new SchemaTokenType("ENTITY_BUILDIN_TYPE");
+  IElementType ENTITY_BUILDIN_CLASS = new SchemaTokenType("ENTITY_BUILDIN_CLASS");
+  IElementType ENTITY_CLASS = new SchemaTokenType("ENTITY_CLASS");
   IElementType ENTITY_NAME = new SchemaTokenType("ENTITY_NAME");
-  IElementType ENTITY_TYPE = new SchemaTokenType("ENTITY_TYPE");
   IElementType EOL = new SchemaTokenType("EOL");
   IElementType INDENT = new SchemaTokenType("INDENT");
   IElementType INHERITED = new SchemaTokenType("INHERITED");

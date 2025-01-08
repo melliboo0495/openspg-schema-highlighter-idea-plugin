@@ -7,6 +7,7 @@ import static org.openspg.idea.grammar.psi.SchemaTypes.*;
 import static org.openspg.idea.schema.grammar.SchemaParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.LightPsiParser;
 
@@ -307,6 +308,31 @@ public class SchemaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // COLON WHITESPACE* ENTITY_BUILDIN_CLASS
+  static boolean basedEntityClass_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "basedEntityClass_")) return false;
+    if (!nextTokenIs(b, COLON)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && basedEntityClass__1(b, l + 1);
+    r = r && consumeToken(b, ENTITY_BUILDIN_CLASS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // WHITESPACE*
+  private static boolean basedEntityClass__1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "basedEntityClass__1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, WHITESPACE)) break;
+      if (!empty_element_parsed_guard_(b, "basedEntityClass__1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // entity_info EOL_* (INDENT entity_meta)*
   public static boolean entity(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "entity")) return false;
@@ -354,7 +380,7 @@ public class SchemaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ENTITY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* ENTITY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* (COLON | INHERITED) WHITESPACE* (ENTITY_BUILDIN_TYPE | ENTITY_TYPE)
+  // ENTITY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* ENTITY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* (basedEntityClass_|inheritedEntityClass_)
   public static boolean entity_info(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "entity_info")) return false;
     if (!nextTokenIs(b, ENTITY_NAME)) return false;
@@ -369,8 +395,6 @@ public class SchemaParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, CLOSE_BRACKET);
     r = r && entity_info_7(b, l + 1);
     r = r && entity_info_8(b, l + 1);
-    r = r && entity_info_9(b, l + 1);
-    r = r && entity_info_10(b, l + 1);
     exit_section_(b, m, ENTITY_INFO, r);
     return r;
   }
@@ -419,32 +443,12 @@ public class SchemaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COLON | INHERITED
+  // basedEntityClass_|inheritedEntityClass_
   private static boolean entity_info_8(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "entity_info_8")) return false;
     boolean r;
-    r = consumeToken(b, COLON);
-    if (!r) r = consumeToken(b, INHERITED);
-    return r;
-  }
-
-  // WHITESPACE*
-  private static boolean entity_info_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "entity_info_9")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, WHITESPACE)) break;
-      if (!empty_element_parsed_guard_(b, "entity_info_9", c)) break;
-    }
-    return true;
-  }
-
-  // ENTITY_BUILDIN_TYPE | ENTITY_TYPE
-  private static boolean entity_info_10(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "entity_info_10")) return false;
-    boolean r;
-    r = consumeToken(b, ENTITY_BUILDIN_TYPE);
-    if (!r) r = consumeToken(b, ENTITY_TYPE);
+    r = basedEntityClass_(b, l + 1);
+    if (!r) r = inheritedEntityClass_(b, l + 1);
     return r;
   }
 
@@ -540,6 +544,101 @@ public class SchemaParser implements PsiParser, LightPsiParser {
     r = r && attribute(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // INHERITED WHITESPACE* ((ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)* ENTITY_CLASS) WHITESPACE* COLON
+  static boolean inheritedEntityClass_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass_")) return false;
+    if (!nextTokenIs(b, INHERITED)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, INHERITED);
+    r = r && inheritedEntityClass__1(b, l + 1);
+    r = r && inheritedEntityClass__2(b, l + 1);
+    r = r && inheritedEntityClass__3(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // WHITESPACE*
+  private static boolean inheritedEntityClass__1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, WHITESPACE)) break;
+      if (!empty_element_parsed_guard_(b, "inheritedEntityClass__1", c)) break;
+    }
+    return true;
+  }
+
+  // (ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)* ENTITY_CLASS
+  private static boolean inheritedEntityClass__2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = inheritedEntityClass__2_0(b, l + 1);
+    r = r && consumeToken(b, ENTITY_CLASS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)*
+  private static boolean inheritedEntityClass__2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__2_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!inheritedEntityClass__2_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "inheritedEntityClass__2_0", c)) break;
+    }
+    return true;
+  }
+
+  // ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*
+  private static boolean inheritedEntityClass__2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__2_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ENTITY_CLASS);
+    r = r && inheritedEntityClass__2_0_0_1(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && inheritedEntityClass__2_0_0_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // WHITESPACE*
+  private static boolean inheritedEntityClass__2_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__2_0_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, WHITESPACE)) break;
+      if (!empty_element_parsed_guard_(b, "inheritedEntityClass__2_0_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // WHITESPACE*
+  private static boolean inheritedEntityClass__2_0_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__2_0_0_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, WHITESPACE)) break;
+      if (!empty_element_parsed_guard_(b, "inheritedEntityClass__2_0_0_3", c)) break;
+    }
+    return true;
+  }
+
+  // WHITESPACE*
+  private static boolean inheritedEntityClass__3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inheritedEntityClass__3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, WHITESPACE)) break;
+      if (!empty_element_parsed_guard_(b, "inheritedEntityClass__3", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */

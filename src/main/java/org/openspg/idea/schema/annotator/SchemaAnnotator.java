@@ -19,7 +19,7 @@ final class SchemaAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element.getNode().getElementType() == SchemaTypes.ENTITY_TYPE) {
+        if (element.getNode().getElementType() == SchemaTypes.ENTITY_CLASS) {
             handleEntityType(element, holder);
         }
     }

@@ -56,7 +56,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
         //System.out.println("SchemaSyntaxHighlighter.getTokenHighlights " + tokenType);
 
         if (tokenType.equals(SchemaTypes.NAMESPACE_MARKER)
-                || tokenType.equals(SchemaTypes.ENTITY_BUILDIN_TYPE)
+                || tokenType.equals(SchemaTypes.ENTITY_BUILDIN_CLASS)
                 || tokenType.equals(SchemaTypes.BUILDIN_TYPE)
                 || tokenType.equals(SchemaTypes.META_TYPE)
                 || tokenType.equals(SchemaTypes.ATTRMETA_TYPE)
@@ -74,7 +74,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
         }
 
         if (tokenType.equals(SchemaTypes.ENTITY_NAME)
-                || tokenType.equals(SchemaTypes.ENTITY_TYPE)
+                || tokenType.equals(SchemaTypes.ENTITY_CLASS)
         ) {
             return CLASS_NAME_KEYS;
         }

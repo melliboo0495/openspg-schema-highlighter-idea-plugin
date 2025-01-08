@@ -16,7 +16,7 @@ public final class SchemaLineMarkerProvider extends RelatedItemLineMarkerProvide
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element,
                                             @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
-        if (element.getNode().getElementType() == SchemaTypes.ENTITY_TYPE) {
+        if (element.getNode().getElementType() == SchemaTypes.ENTITY_CLASS) {
             handleEntityType(element, result);
         }
     }

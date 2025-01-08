@@ -3,6 +3,7 @@ package org.openspg.idea.schema.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ final class SchemaCompletionContributor extends CompletionContributor {
 
     SchemaCompletionContributor() {
         // extend EntityType (level 1) completion
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.ENTITY_TYPE),
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.ENTITY_CLASS),
                 new CompletionProvider<>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                @NotNull ProcessingContext context,
@@ -23,14 +24,18 @@ final class SchemaCompletionContributor extends CompletionContributor {
                         resultSet.addElement(LookupElementBuilder.create("EntityType"));
                         resultSet.addElement(LookupElementBuilder.create("ConceptType"));
                         resultSet.addElement(LookupElementBuilder.create("EventType"));
+                        resultSet.addElement(LookupElementBuilder.create("StandardType"));
+                        resultSet.addElement(LookupElementBuilder.create("BasicType"));
 
-                        SchemaEntityInfo currentInfo = (SchemaEntityInfo) PsiTreeUtil.findFirstParent(parameters.getPosition(), SchemaEntityInfo.class::isInstance);
-                        String currentEntityName = currentInfo == null ? null : currentInfo.getEntityName();
-
-                        Collection<SchemaEntityInfo> infos = PsiTreeUtil.findChildrenOfType(parameters.getOriginalFile(), SchemaEntityInfo.class);
-                        for (SchemaEntityInfo info : infos) {
-                            if (info.getEntityName() != null && !info.getEntityName().equals(currentEntityName)) {
-                                resultSet.addElement(LookupElementBuilder.create(info.getEntityName()));
+                        PsiElement inheritedElement = PsiTreeUtil.findSiblingBackward(parameters.getPosition(), SchemaTypes.INHERITED, null);
+                        if (inheritedElement != null) {
+                            SchemaEntityInfo currentInfo = (SchemaEntityInfo) PsiTreeUtil.findFirstParent(parameters.getPosition(), SchemaEntityInfo.class::isInstance);
+                            String currentEntityName = currentInfo == null ? null : currentInfo.getEntityName();
+                            Collection<SchemaEntityInfo> infos = PsiTreeUtil.findChildrenOfType(parameters.getOriginalFile(), SchemaEntityInfo.class);
+                            for (SchemaEntityInfo info : infos) {
+                                if (info.getEntityName() != null && !info.getEntityName().equals(currentEntityName)) {
+                                    resultSet.addElement(LookupElementBuilder.create(info.getEntityName()));
+                                }
                             }
                         }
                     }

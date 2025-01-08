@@ -4,11 +4,13 @@ package org.openspg.idea.lang.psi.impl;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
+import static org.openspg.idea.grammar.psi.SchemaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import org.openspg.idea.schema.psi.impl.SchemaPsiImplUtil;
 import org.openspg.idea.lang.psi.*;
+import org.openspg.idea.schema.psi.impl.SchemaPsiImplUtil;
 
 public class SchemaEntityMetaImpl extends ASTWrapperPsiElement implements SchemaEntityMeta {
 

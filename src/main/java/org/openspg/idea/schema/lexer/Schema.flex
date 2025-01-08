@@ -60,7 +60,7 @@ import com.intellij.psi.tree.IElementType;
         //System.out.println("currentIndentPos: " + currentIndentPos);
         if (currentIndentPos > lastIndentPos) {
             if (this.currentIndentLevel == maxIndentLevel) {
-                return LEVEL_ERROR;
+                return ERROR_STATE;
             }
             this.currentIndentLevel ++;
             this.indentPos[this.currentIndentLevel] = currentIndentPos;
@@ -73,7 +73,7 @@ import com.intellij.psi.tree.IElementType;
                     return this.indentState[this.currentIndentLevel];
                 }
             }
-            return LEVEL_ERROR;
+            return ERROR_STATE;
         }
         return this.indentState[this.currentIndentLevel];
     }
@@ -93,6 +93,11 @@ import com.intellij.psi.tree.IElementType;
         if (myBraceCount == 0){
             yybegin(this.indentState[this.currentIndentLevel]);
         }
+    }
+
+    private void goToState(int state) {
+        yybegin(state);
+        yypushback(yylength());
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -117,7 +122,7 @@ EOL =                           "\n"
 WHITE_SPACE_CHAR =              [ \t]
 WHITE_SPACE =                   {WHITE_SPACE_CHAR}+
 
-NAME =                          (!(!{NS_CHAR}|{NS_INDICATOR}))+
+NAME =                          [\w]+
 
 LINE =                          [^\n]*
 
@@ -140,9 +145,9 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 %xstate LINE_START_STATE, BLOCK_STATE, PLAIN_BLOCK_STATE
 
 // Small technical one-token states
-%xstate NAMESPACE_STATE, ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE, LEVEL_ERROR
+%xstate NAMESPACE_STATE, ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE, ERROR_STATE
 
-%xstate WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_TYPE_STATE
+%xstate WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE
 %xstate WAITING_METAINFO_VALUE_STATE
 %xstate WAITING_ATTR_ALIAS_NAME_STATE, WAITING_ATTR_TYPE_STATE
 %xstate WAITING_SUBPROP_TYPE_STATE
@@ -157,8 +162,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
     // It is a text, go next state and process it there
     "namespace" {
           this.currentIndentLevel = 0;
-          yybegin(NAMESPACE_STATE);
-          yypushback(yylength());
+          goToState(NAMESPACE_STATE);
       }
 
     {WHITE_SPACE} {
@@ -166,14 +170,13 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return INDENT;
       }
 
-    [^] {
+    {ANY_CHAR} {
           this.currentIndentLevel = 0;
-          yybegin(ENTITY_STATE);
-          yypushback(yylength());
+          goToState(ENTITY_STATE);
       }
 }
 
-<NAMESPACE_STATE, ENTITY_STATE, ATTR_STATE, SUBPROP_STATE, META_STATE, ATTRMETA_STATE, SUBPROPMETA_STATE, LEVEL_ERROR> {
+<NAMESPACE_STATE, ENTITY_STATE, ATTR_STATE, SUBPROP_STATE, META_STATE, ATTRMETA_STATE, SUBPROPMETA_STATE, ERROR_STATE> {
     {WHITE_SPACE}*{EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
@@ -200,17 +203,19 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 }
 
 
-<LEVEL_ERROR> {
-    [^] {
+<ERROR_STATE> {
+    {ANY_CHAR} {
           return BAD_CHAR;
       }
 }
 
-// level-1 entity
 <ENTITY_STATE> {
-    {TEXT} {
-          yybegin(WAITING_ENTITY_ALIAS_NAME_STATE);
+    [a-zA-Z0-9\.]+ {
           return ENTITY_NAME;
+      }
+
+    "(" {TEXT} ")" {
+          goToState(WAITING_ENTITY_ALIAS_NAME_STATE);
       }
 
     [^\n] {
@@ -218,7 +223,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 }
 
-<WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_TYPE_STATE, WAITING_ATTR_ALIAS_NAME_STATE, WAITING_ATTR_TYPE_STATE, WAITING_SUBPROP_TYPE_STATE> {
+<WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE, WAITING_ATTR_ALIAS_NAME_STATE, WAITING_ATTR_TYPE_STATE, WAITING_SUBPROP_TYPE_STATE> {
     {WHITE_SPACE}*{EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
@@ -236,35 +241,34 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     ")" {
+          yybegin(WAITING_ENTITY_CLASS_STATE);
           return CLOSE_BRACKET;
       }
 
     {TEXT} {
           return ENTITY_ALIAS_NAME;
       }
+}
+
+<WAITING_ENTITY_CLASS_STATE> {
+    "EntityType" | "ConceptType" | "EventType" | "StandardType" | "BasicType" {
+          return ENTITY_BUILDIN_CLASS;
+      }
+
+    "," {
+          return COMMA;
+      }
 
     ":" {
-          yybegin(WAITING_ENTITY_TYPE_STATE);
           return COLON;
       }
 
     "->" {
-          yybegin(WAITING_ENTITY_TYPE_STATE);
           return INHERITED;
       }
 
-    [^\n] {
-          return BAD_CHAR;
-      }
-}
-
-<WAITING_ENTITY_TYPE_STATE> {
-    "EntityType" | "ConceptType" | "EventType" {
-          return ENTITY_BUILDIN_TYPE;
-      }
-
-    {TEXT} {
-          return ENTITY_TYPE;
+    [a-zA-Z0-9]+ {
+          return ENTITY_CLASS;
       }
 
     [^\n] {

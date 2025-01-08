@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.openspg.idea.grammar.psi.SchemaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.openspg.idea.lang.psi.*;
+import org.openspg.idea.schema.psi.impl.SchemaPsiImplUtil;
 
 public class SchemaAttributeMetaImpl extends ASTWrapperPsiElement implements SchemaAttributeMeta {
 

@@ -18,7 +18,7 @@
 
 schemaFile ::= item_*
 
-private item_ ::= (namespace|entity|DOCUMENT_END|COMMENT|BAD_CHAR|INDENT|WHITESPACE|EOL|TEXT)
+private item_ ::= namespace|entity|DOCUMENT_END|COMMENT|BAD_CHAR|INDENT|WHITESPACE|EOL|TEXT
 
 private plain_text_block ::= (OPEN_PLAIN_BLOCK (TEXT|EOL|WHITESPACE)* CLOSE_PLAIN_BLOCK)
 private text_value ::= TEXT | plain_text_block
@@ -32,11 +32,14 @@ entity ::= entity_info EOL_* (INDENT entity_meta)* {
     methods=[getName]
 }
 
-entity_info ::= (ENTITY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* ENTITY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* (COLON | INHERITED) WHITESPACE* (ENTITY_BUILDIN_TYPE | ENTITY_TYPE)) {
+entity_info ::= ENTITY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* ENTITY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* (basedEntityClass_|inheritedEntityClass_) {
     mixin="org.openspg.idea.schema.psi.impl.SchemaNamedElementImpl"
     implements="org.openspg.idea.schema.psi.SchemaNamedElement"
-    methods=[getEntityName getEntityAliasName getEntityType getName setName getNameIdentifier]
+    methods=[getEntityName getEntityAliasName getEntityClassList getName setName getNameIdentifier]
 }
+
+private basedEntityClass_ ::= COLON WHITESPACE* ENTITY_BUILDIN_CLASS
+private inheritedEntityClass_ ::= INHERITED WHITESPACE* ((ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)* ENTITY_CLASS) WHITESPACE* COLON
 
 entity_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT attribute)* {
     methods=[getName]
