@@ -52,8 +52,7 @@ final class SchemaCompletionContributor extends CompletionContributor {
                 resultSet.addElement(LookupElementBuilder.create("Integer"));
             }
         };
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.ATTR_TYPE), attrTypeProvider);
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.SUBPROP_TYPE), attrTypeProvider);
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.PROPERTY_CLASS), attrTypeProvider);
 
         // TODO: extend any elements completion
         //CompletionProvider<CompletionParameters> metaProvider = new CompletionProvider<>() {

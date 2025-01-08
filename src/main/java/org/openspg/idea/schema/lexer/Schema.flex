@@ -28,7 +28,8 @@ import com.intellij.psi.tree.IElementType;
     private int myBraceCount = 0;
 
     private final int[] indentPos = {0, 0, 0, 0, 0, 0};
-    private final int[] indentState = {ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE};
+    private final int[] indentState = {ENTITY_STATE, ENTITYMETA_STATE, PROPERTY_STATE, PROPERTYMETA_STATE, PROPERTY_STATE, PROPERTYMETA_STATE};
+    private final IElementType[] indentToken = {INDENT, INDENT_META, INDENT_PROP, INDENT_PROPMETA, INDENT_SUBPROP, INDENT_SUBPROPMETA};
     private final int maxIndentLevel = 6;
     private int currentIndentLevel = 0;
 
@@ -45,7 +46,7 @@ import com.intellij.psi.tree.IElementType;
         return prev == (char)-1 || prev == '\n';
     }
 
-    private int getIndentState() {
+    private int getIndentLevel() {
         assert isAfterEol();
         int currentIndentPos = yylength();
         for (int i = 0; i < yylength(); i+=1) {
@@ -55,27 +56,24 @@ import com.intellij.psi.tree.IElementType;
         }
 
         int lastIndentPos = this.indentPos[this.currentIndentLevel];
-        //trace("=================");
-        //System.out.println("lastIndentPos: " + lastIndentPos);
-        //System.out.println("currentIndentPos: " + currentIndentPos);
         if (currentIndentPos > lastIndentPos) {
             if (this.currentIndentLevel == maxIndentLevel) {
-                return ERROR_STATE;
+                return -1;
             }
             this.currentIndentLevel ++;
             this.indentPos[this.currentIndentLevel] = currentIndentPos;
-            return this.indentState[this.currentIndentLevel];
+            return this.currentIndentLevel;
 
         } else if (currentIndentPos < lastIndentPos) {
             for (int i = 0; i < this.currentIndentLevel; i++) {
                 if (this.indentPos[i] == currentIndentPos) {
                     this.currentIndentLevel = i;
-                    return this.indentState[this.currentIndentLevel];
+                    return this.currentIndentLevel;
                 }
             }
-            return ERROR_STATE;
+            return -1;
         }
-        return this.indentState[this.currentIndentLevel];
+        return this.currentIndentLevel;
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -98,6 +96,9 @@ import com.intellij.psi.tree.IElementType;
     private void goToState(int state) {
         yybegin(state);
         yypushback(yylength());
+    }
+
+    private void resetEnveriment() {
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -145,18 +146,22 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 %xstate LINE_START_STATE, BLOCK_STATE, PLAIN_BLOCK_STATE
 
 // Small technical one-token states
-%xstate NAMESPACE_STATE, ENTITY_STATE, META_STATE, ATTR_STATE, ATTRMETA_STATE, SUBPROP_STATE, SUBPROPMETA_STATE, ERROR_STATE
+%xstate NAMESPACE_STATE, ERROR_STATE
 
-%xstate WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE
-%xstate WAITING_METAINFO_VALUE_STATE
-%xstate WAITING_ATTR_ALIAS_NAME_STATE, WAITING_ATTR_TYPE_STATE
-%xstate WAITING_SUBPROP_TYPE_STATE
+%xstate ENTITY_STATE, WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE
+%xstate ENTITYMETA_STATE
+
+%xstate PROPERTY_STATE, WAITING_PROPERTY_ALIAS_NAME_STATE, WAITING_PROPERTY_CLASS_STATE
+%xstate PROPERTYMETA_STATE
+
+%xstate WAITING_META_VALUE_STATE
 
 %%
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// RULES declarations ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//-------------------------------------------------------------------------------------------------------------------
 // State in the start of new line in block mode
 <YYINITIAL, LINE_START_STATE> {
     // It is a text, go next state and process it there
@@ -165,9 +170,23 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           goToState(NAMESPACE_STATE);
       }
 
+    {WHITE_SPACE} {COMMENT} {
+          return COMMENT;
+      }
+
+    {EOL} {
+          return EOL;
+      }
+
     {WHITE_SPACE} {
-          yybegin(getIndentState());
-          return INDENT;
+          int indentLevel = this.getIndentLevel();
+          if (indentLevel < 0) {
+              goToState(ERROR_STATE);
+          } else {
+              yybegin(this.indentState[indentLevel]);
+              this.resetEnveriment();
+              return this.indentToken[indentLevel];
+          }
       }
 
     {ANY_CHAR} {
@@ -175,8 +194,12 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           goToState(ENTITY_STATE);
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
-<NAMESPACE_STATE, ENTITY_STATE, ATTR_STATE, SUBPROP_STATE, META_STATE, ATTRMETA_STATE, SUBPROPMETA_STATE, ERROR_STATE> {
+
+//-------------------------------------------------------------------------------------------------------------------
+// common: white-space, eol, comment
+<NAMESPACE_STATE, ENTITY_STATE, ENTITYMETA_STATE, PROPERTY_STATE, PROPERTYMETA_STATE, ERROR_STATE> {
     {WHITE_SPACE}*{EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
@@ -190,8 +213,11 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return WHITESPACE;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
-// level-1 namespace
+
+//-------------------------------------------------------------------------------------------------------------------
+// namespace
 <NAMESPACE_STATE> {
     "namespace" {
         return NAMESPACE_MARKER;
@@ -201,14 +227,35 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return NAMESPACE_VALUE;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
 
+//-------------------------------------------------------------------------------------------------------------------
+// common error line
 <ERROR_STATE> {
     {ANY_CHAR} {
           return BAD_CHAR;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
+
+// common waiting state
+<WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE, WAITING_PROPERTY_ALIAS_NAME_STATE, WAITING_PROPERTY_CLASS_STATE, WAITING_META_VALUE_STATE> {
+    {WHITE_SPACE}*{EOL} {
+          yybegin(LINE_START_STATE);
+          return EOL;
+      }
+
+    {WHITE_SPACE} {
+          return WHITESPACE;
+      }
+}
+//-------------------------------------------------------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------------------------------------------------------
+// level-1 entity
 <ENTITY_STATE> {
     [a-zA-Z0-9\.]+ {
           return ENTITY_NAME;
@@ -223,19 +270,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 }
 
-<WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE, WAITING_ATTR_ALIAS_NAME_STATE, WAITING_ATTR_TYPE_STATE, WAITING_SUBPROP_TYPE_STATE> {
-    {WHITE_SPACE}*{EOL} {
-          yybegin(LINE_START_STATE);
-          return EOL;
-      }
-
-    {WHITE_SPACE} {
-          return WHITESPACE;
-      }
-}
-
 <WAITING_ENTITY_ALIAS_NAME_STATE> {
-
     "(" {
           return OPEN_BRACKET;
       }
@@ -275,21 +310,18 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return BAD_CHAR;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
-// level-2 mata-info
-<META_STATE, ATTRMETA_STATE, SUBPROPMETA_STATE> {
-    "desc" | "properties" | "relations" | "hypernymPredicate" | "constraint" | "rule" | "index" {
-          if (yystate() == ATTRMETA_STATE) {
-              return ATTRMETA_TYPE;
 
-          } else if (yystate() == SUBPROPMETA_STATE) {
-              return SUBPROPMETA_TYPE;
-          }
+//-------------------------------------------------------------------------------------------------------------------
+// level-2 entity meta
+<ENTITYMETA_STATE> {
+    "desc" | "properties" | "relations" | "hypernymPredicate" | "regular" | "spreadable" | "autoRelate" {
           return META_TYPE;
       }
 
     ":" {
-          yybegin(WAITING_METAINFO_VALUE_STATE);
+          yybegin(WAITING_META_VALUE_STATE);
           return COLON;
       }
 
@@ -297,8 +329,86 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return BAD_CHAR;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
-<WAITING_METAINFO_VALUE_STATE> {
+
+//-------------------------------------------------------------------------------------------------------------------
+// level-3/5 property/subproperty
+<PROPERTY_STATE> {
+    [a-zA-Z0-9#]+ {
+          return PROPERTY_NAME;
+      }
+
+    "(" {TEXT} ")" {
+          goToState(WAITING_PROPERTY_ALIAS_NAME_STATE);
+      }
+
+    [^\n] {
+          return BAD_CHAR;
+      }
+}
+
+<WAITING_PROPERTY_ALIAS_NAME_STATE> {
+    "(" {
+          return OPEN_BRACKET;
+      }
+
+    ")" {
+          yybegin(WAITING_PROPERTY_CLASS_STATE);
+          return CLOSE_BRACKET;
+      }
+
+    {TEXT} {
+          return PROPERTY_ALIAS_NAME;
+      }
+}
+
+<WAITING_PROPERTY_CLASS_STATE> {
+    "EntityType" | "ConceptType" | "EventType" | "StandardType" | "Integer" | "Text" | "Float" {
+          return BUILDIN_TYPE;
+      }
+
+    "," {
+          return COMMA;
+      }
+
+    ":" {
+          return COLON;
+      }
+
+    [a-zA-Z0-9\.]+ {
+          return PROPERTY_CLASS;
+      }
+
+    [^\n] {
+          return BAD_CHAR;
+      }
+}
+//-------------------------------------------------------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------------------------------------------------------
+// level-4/6 property meta/subproperty meta
+<PROPERTYMETA_STATE> {
+    "desc" | "properties" | "constraint" | "rule" | "index" {
+          return META_TYPE;
+      }
+
+    ":" {
+          yybegin(WAITING_META_VALUE_STATE);
+          return COLON;
+      }
+
+    [^\n] {
+          return BAD_CHAR;
+      }
+}
+//-------------------------------------------------------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------------------------------------------------------
+// common meta value
+<WAITING_META_VALUE_STATE> {
     {WHITE_SPACE}*{EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
@@ -325,83 +435,11 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           return BAD_CHAR;
       }
 }
+//-------------------------------------------------------------------------------------------------------------------
 
-<ATTR_STATE> {
-    {TEXT} {
-          yybegin(WAITING_ATTR_ALIAS_NAME_STATE);
-          return ATTR_NAME;
-      }
 
-    [^\n] {
-          return BAD_CHAR;
-      }
-
-}
-
-<WAITING_ATTR_ALIAS_NAME_STATE> {
-
-    "(" {
-          return OPEN_BRACKET;
-      }
-
-    ")" {
-          return CLOSE_BRACKET;
-      }
-
-    {TEXT} {
-          return ATTR_ALIAS_NAME;
-      }
-
-    ":" {
-          yybegin(WAITING_ATTR_TYPE_STATE);
-          return COLON;
-      }
-
-    [^\n] {
-          return BAD_CHAR;
-      }
-}
-
-<WAITING_ATTR_TYPE_STATE> {
-    "Text" | "Float" | "Integer" {
-          return BUILDIN_TYPE;
-      }
-
-    {TEXT} {
-          return ATTR_TYPE;
-      }
-
-    [^\n] {
-          return BAD_CHAR;
-      }
-}
-
-// level-3 sub properties
-<SUBPROP_STATE> {
-    {TEXT} {
-          return SUBPROP_NAME;
-      }
-
-    ":" {
-          yybegin(WAITING_SUBPROP_TYPE_STATE);
-          return COLON;
-      }
-}
-
-<WAITING_SUBPROP_TYPE_STATE> {
-    "Text" | "Float" | "Integer" {
-          return BUILDIN_TYPE;
-      }
-
-    {TEXT} {
-          return SUBPROP_TYPE;
-      }
-
-    [^\n] {
-          return BAD_CHAR;
-      }
-}
-
+//-------------------------------------------------------------------------------------------------------------------
+// plain block. [[plain text]]
 <PLAIN_BLOCK_STATE> {
     {WHITE_SPACE}*{EOL} {
           return EOL;

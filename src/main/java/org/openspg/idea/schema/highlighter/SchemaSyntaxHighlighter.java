@@ -59,8 +59,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(SchemaTypes.ENTITY_BUILDIN_CLASS)
                 || tokenType.equals(SchemaTypes.BUILDIN_TYPE)
                 || tokenType.equals(SchemaTypes.META_TYPE)
-                || tokenType.equals(SchemaTypes.ATTRMETA_TYPE)
-                || tokenType.equals(SchemaTypes.SUBPROPMETA_TYPE)
+                || tokenType.equals(SchemaTypes.PROPERTY_CLASS)
         ) {
             return KEYWORDS_KEYS;
         }
@@ -80,7 +79,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
         }
 
         if (tokenType.equals(SchemaTypes.ENTITY_ALIAS_NAME)
-                || tokenType.equals(SchemaTypes.ATTR_ALIAS_NAME)
+                || tokenType.equals(SchemaTypes.PROPERTY_ALIAS_NAME)
         ) {
             return ALIAS_NAME_KEYS;
         }
