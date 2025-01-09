@@ -8,8 +8,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openspg.idea.schema.structureView.viewElement.SchemaFileStructureViewElement;
 import org.openspg.idea.lang.psi.SchemaEntityInfo;
+import org.openspg.idea.schema.structureView.viewElement.SchemaFileStructureViewElement;
 
 public class SchemaStructureViewModel extends StructureViewModelBase implements
         StructureViewModel.ElementInfoProvider {
@@ -31,7 +31,6 @@ public class SchemaStructureViewModel extends StructureViewModelBase implements
 
     @Override
     public boolean isAlwaysLeaf(StructureViewTreeElement element) {
-        //return element.getValue() instanceof SchemaEntity;
         return false;
     }
 

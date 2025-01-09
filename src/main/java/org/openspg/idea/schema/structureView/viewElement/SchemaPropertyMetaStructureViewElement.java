@@ -5,15 +5,15 @@ import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.openspg.idea.lang.psi.SchemaEntityMeta;
-import org.openspg.idea.lang.psi.SchemaProperty;
+import org.openspg.idea.lang.psi.SchemaPropertyMeta;
+import org.openspg.idea.lang.psi.SchemaSubProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SchemaEntityMetaStructureViewElement extends AbstractSchemaStructureViewElement<SchemaEntityMeta> {
+public class SchemaPropertyMetaStructureViewElement extends AbstractSchemaStructureViewElement<SchemaPropertyMeta> {
 
-    public SchemaEntityMetaStructureViewElement(SchemaEntityMeta element) {
+    public SchemaPropertyMetaStructureViewElement(SchemaPropertyMeta element) {
         super(element);
     }
 
@@ -23,22 +23,22 @@ public class SchemaEntityMetaStructureViewElement extends AbstractSchemaStructur
     }
 
     @Override
-    protected PresentationData createPresentation(SchemaEntityMeta element) {
+    protected PresentationData createPresentation(SchemaPropertyMeta element) {
         return new PresentationData(
                 element.getName(),
                 element.getValue(),
-                element.getPropertyList().isEmpty() ? AllIcons.General.GreenCheckmark : AllIcons.Actions.GroupByClass,
+                element.getSubPropertyList().isEmpty() ? AllIcons.General.GreenCheckmark : AllIcons.Json.Array,
                 null
         );
     }
 
     @Override
     public TreeElement @NotNull [] getChildren() {
-        List<SchemaProperty> elements = PsiTreeUtil.getChildrenOfTypeAsList(myElement, SchemaProperty.class);
+        List<SchemaSubProperty> elements = PsiTreeUtil.getChildrenOfTypeAsList(myElement, SchemaSubProperty.class);
 
         List<TreeElement> treeElements = new ArrayList<>(elements.size());
-        for (SchemaProperty element : elements) {
-            treeElements.add(new SchemaPropertyStructureViewElement(element));
+        for (SchemaSubProperty element : elements) {
+            treeElements.add(new SchemaSubPropertyStructureViewElement(element));
         }
         return treeElements.toArray(new TreeElement[0]);
     }

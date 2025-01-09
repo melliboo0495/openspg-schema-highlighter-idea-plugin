@@ -7,12 +7,13 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class SchemaStructureViewElement<T extends PsiElement> implements StructureViewTreeElement, SortableTreeElement {
+abstract class AbstractSchemaStructureViewElement<T extends PsiElement> implements StructureViewTreeElement, SortableTreeElement {
 
     protected final T myElement;
 
-    public SchemaStructureViewElement(T element) {
+    public AbstractSchemaStructureViewElement(T element) {
         this.myElement = element;
     }
 
@@ -46,6 +47,13 @@ public abstract class SchemaStructureViewElement<T extends PsiElement> implement
 
     @NotNull
     @Override
+    public String getAlphaSortKey() {
+        String key = this.getNullableAlphaSortKey();
+        return key == null ? "" : key;
+    }
+
+    @NotNull
+    @Override
     public ItemPresentation getPresentation() {
         if (myElement instanceof NavigatablePsiElement) {
             ItemPresentation presentation = ((NavigatablePsiElement) myElement).getPresentation();
@@ -59,6 +67,11 @@ public abstract class SchemaStructureViewElement<T extends PsiElement> implement
 
     protected PresentationData createPresentation(T element) {
         return new PresentationData();
+    }
+
+    @Nullable
+    protected String getNullableAlphaSortKey() {
+        return null;
     }
 
 }

@@ -9,7 +9,7 @@ import org.openspg.idea.lang.psi.SchemaEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SchemaFileStructureViewElement extends SchemaStructureViewElement<PsiFile> {
+public class SchemaFileStructureViewElement extends AbstractSchemaStructureViewElement<PsiFile> {
 
     public SchemaFileStructureViewElement(PsiFile element) {
         super(element);
@@ -18,8 +18,7 @@ public class SchemaFileStructureViewElement extends SchemaStructureViewElement<P
     @NotNull
     @Override
     public String getAlphaSortKey() {
-        String name = myElement.getName();
-        return name != null ? name : "";
+        return myElement.getName();
     }
 
     @Override

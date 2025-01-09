@@ -44,19 +44,27 @@ private basedEntityClass_ ::= COLON WHITESPACE* ENTITY_BUILDIN_CLASS
 private inheritedEntityClass_ ::= INHERITED WHITESPACE* ((ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)* ENTITY_CLASS) WHITESPACE* COLON
 
 entity_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT_PROP property)* {
-    methods=[getName]
+    methods=[getName getValue]
 }
 
 
 property ::= property_info EOL_* (INDENT_PROPMETA property_meta EOL_*)*
 
-property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_)
 private propertyClass_ ::= (BUILDIN_TYPE | PROPERTY_CLASS)
 private multiPropertyClass_ ::= (propertyClass_ WHITESPACE* COMMA WHITESPACE*)* propertyClass_
+property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_) {
+    methods=[getPropertyName getPropertyAliasName getPropertyClassList]
+}
 
-property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT_SUBPROP sub_property)*
+property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT_SUBPROP sub_property)* {
+    methods=[getName getValue]
+}
 
 
 sub_property ::= sub_property_info EOL_* (INDENT_SUBPROPMETA sub_property_meta EOL_*)*
-sub_property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_)
-sub_property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*)
+sub_property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_) {
+    methods=[getPropertyName getPropertyAliasName getPropertyClassList]
+}
+sub_property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) {
+    methods=[getName getValue]
+}

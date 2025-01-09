@@ -12,17 +12,15 @@ import org.openspg.idea.lang.psi.SchemaEntityMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SchemaEntityStructureViewElement extends SchemaStructureViewElement<SchemaEntity> {
+public class SchemaEntityStructureViewElement extends AbstractSchemaStructureViewElement<SchemaEntity> {
 
     public SchemaEntityStructureViewElement(SchemaEntity element) {
         super(element);
     }
 
-    @NotNull
     @Override
-    public String getAlphaSortKey() {
-        String name = myElement.getName();
-        return name != null ? name : "";
+    public String getNullableAlphaSortKey() {
+        return myElement.getName();
     }
 
     @Override

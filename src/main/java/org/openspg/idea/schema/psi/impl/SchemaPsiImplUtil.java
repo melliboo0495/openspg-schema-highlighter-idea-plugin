@@ -2,12 +2,11 @@ package org.openspg.idea.schema.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import org.openspg.idea.grammar.psi.SchemaTypes;
-import org.openspg.idea.lang.psi.SchemaEntity;
-import org.openspg.idea.lang.psi.SchemaEntityInfo;
-import org.openspg.idea.lang.psi.SchemaEntityMeta;
-import org.openspg.idea.lang.psi.SchemaNamespace;
+import org.openspg.idea.lang.psi.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SchemaPsiImplUtil {
@@ -44,20 +43,14 @@ public class SchemaPsiImplUtil {
     }
 
     public static List<String> getEntityClassList(SchemaEntityInfo element) {
-        ////List<String> classList = new ArrayList<String>();
-        ////
-        ////Collection<PsiElement> elements = PsiTreeUtil.findChildOfAnyType(element, SchemaTypes.ENTITY_BUILDIN_CLASS);
-        ////if (valueNode != null) {
-        ////    classList.add(unwrapText(valueNode.getText()));
-        ////}
-        ////
-        ////valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_CLASS);
-        ////if (valueNode != null) {
-        ////    classList.add(unwrapText(valueNode.getText()));
-        ////}
-        //return classList;
-        //TODO
-        return null;
+        List<String> classList = new ArrayList<>();
+        for (PsiElement child : element.getChildren()) {
+            IElementType type = child.getNode().getElementType();
+            if (type == SchemaTypes.ENTITY_BUILDIN_CLASS || type == SchemaTypes.ENTITY_CLASS) {
+                classList.add(unwrapText(child.getText()));
+            }
+        }
+        return classList;
     }
 
     public static String getName(SchemaEntityInfo element) {
@@ -65,25 +58,92 @@ public class SchemaPsiImplUtil {
     }
 
     public static PsiElement setName(SchemaEntityInfo element, String newName) {
-        ASTNode keyNode = element.getNode().findChildByType(SchemaTypes.ENTITY_NAME);
-        if (keyNode != null) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_NAME);
+        if (valueNode != null) {
             System.out.println("entity name: " + element.getNode().getElementType());
             //SimpleProperty property =
             //        SimpleElementFactory.createProperty(element.getProject(), newName);
             //ASTNode newKeyNode = property.getFirstChild().getNode();
-            //element.getNode().replaceChild(keyNode, newKeyNode);
+            //element.getNode().replaceChild(valueNode, newKeyNode);
         }
         return element;
     }
 
     public static PsiElement getNameIdentifier(SchemaEntityInfo element) {
-        ASTNode keyNode = element.getNode().findChildByType(SchemaTypes.ENTITY_NAME);
-        return keyNode != null ? keyNode.getPsi() : null;
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.ENTITY_NAME);
+        return valueNode != null ? valueNode.getPsi() : null;
     }
 
     public static String getName(SchemaEntityMeta element) {
-        ASTNode keyNode = element.getNode().findChildByType(SchemaTypes.META_TYPE);
-        return keyNode != null ? keyNode.getText() : null;
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.META_TYPE);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getValue(SchemaEntityMeta element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.TEXT);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getPropertyName(SchemaPropertyInfo element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.PROPERTY_NAME);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getPropertyAliasName(SchemaPropertyInfo element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.PROPERTY_ALIAS_NAME);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static List<String> getPropertyClassList(SchemaPropertyInfo element) {
+        List<String> classList = new ArrayList<>();
+        for (PsiElement child : element.getChildren()) {
+            IElementType type = child.getNode().getElementType();
+            if (type == SchemaTypes.BUILDIN_TYPE || type == SchemaTypes.PROPERTY_CLASS) {
+                classList.add(unwrapText(child.getText()));
+            }
+        }
+        return classList;
+    }
+
+    public static String getName(SchemaPropertyMeta element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.META_TYPE);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getValue(SchemaPropertyMeta element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.TEXT);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getPropertyName(SchemaSubPropertyInfo element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.PROPERTY_NAME);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getName(SchemaSubPropertyMeta element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.META_TYPE);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getValue(SchemaSubPropertyMeta element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.TEXT);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static String getPropertyAliasName(SchemaSubPropertyInfo element) {
+        ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.PROPERTY_ALIAS_NAME);
+        return valueNode != null ? valueNode.getText() : null;
+    }
+
+    public static List<String> getPropertyClassList(SchemaSubPropertyInfo element) {
+        List<String> classList = new ArrayList<>();
+        for (PsiElement child : element.getChildren()) {
+            IElementType type = child.getNode().getElementType();
+            if (type == SchemaTypes.BUILDIN_TYPE || type == SchemaTypes.PROPERTY_CLASS) {
+                classList.add(unwrapText(child.getText()));
+            }
+        }
+        return classList;
     }
 
     public static String unwrapText(String text) {
