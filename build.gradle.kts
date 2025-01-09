@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.openspg.idea"
-version = "0.1.1"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -40,7 +40,7 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("241")
+        sinceBuild.set("223")
         untilBuild.set("243.*")
     }
 
