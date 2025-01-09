@@ -18,15 +18,15 @@
 
 schemaFile ::= item_*
 
-private item_ ::= namespace|entity|DOCUMENT_END|COMMENT|BAD_CHAR|indent_|WHITESPACE|EOL|TEXT|CONSTANT
+private item_ ::= namespace|entity|DOCUMENT_END|COMMENT|indent_|EOL|TEXT|CONSTANT
 
 private indent_ ::= INDENT|INDENT_META|INDENT_PROP|INDENT_PROPMETA|INDENT_SUBPROP|INDENT_SUBPROPMETA
 
-private plain_text_block ::= (OPEN_PLAIN_BLOCK (TEXT|EOL|WHITESPACE)* CLOSE_PLAIN_BLOCK)
+private plain_text_block ::= (OPEN_PLAIN_BLOCK (TEXT|EOL)* CLOSE_PLAIN_BLOCK)
 private text_value ::= TEXT | plain_text_block | CONSTANT
-private EOL_ ::= (WHITESPACE | COMMENT | indent_)* EOL
+private EOL_ ::= (COMMENT | indent_)* EOL
 
-namespace ::= (NAMESPACE_MARKER WHITESPACE+ NAMESPACE_VALUE) {
+namespace ::= NAMESPACE_MARKER TEXT EOL_ {
     methods=[getValue]
 }
 
@@ -34,16 +34,16 @@ entity ::= entity_info EOL_* (INDENT_META entity_meta)* {
     methods=[getName]
 }
 
-entity_info ::= ENTITY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* ENTITY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* (basedEntityClass_|inheritedEntityClass_) {
+entity_info ::= ENTITY_NAME OPEN_BRACKET ENTITY_ALIAS_NAME CLOSE_BRACKET (basedEntityClass_|inheritedEntityClass_) {
     mixin="org.openspg.idea.schema.psi.impl.SchemaNamedElementImpl"
     implements="org.openspg.idea.schema.psi.SchemaNamedElement"
     methods=[getEntityName getEntityAliasName getEntityClassList getName setName getNameIdentifier]
 }
 
-private basedEntityClass_ ::= COLON WHITESPACE* ENTITY_BUILDIN_CLASS
-private inheritedEntityClass_ ::= INHERITED WHITESPACE* ((ENTITY_CLASS WHITESPACE* COMMA WHITESPACE*)* ENTITY_CLASS) WHITESPACE* COLON
+private basedEntityClass_ ::= COLON ENTITY_BUILDIN_CLASS
+private inheritedEntityClass_ ::= INHERITED ((ENTITY_BUILDIN_CLASS|ENTITY_CLASS) COMMA)* (ENTITY_BUILDIN_CLASS|ENTITY_CLASS) COLON
 
-entity_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT_PROP property)* {
+entity_meta ::= (META_TYPE COLON text_value*) EOL_* (INDENT_PROP property)* {
     methods=[getName getValue]
 }
 
@@ -51,20 +51,20 @@ entity_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (IND
 property ::= property_info EOL_* (INDENT_PROPMETA property_meta EOL_*)*
 
 private propertyClass_ ::= (BUILDIN_TYPE | PROPERTY_CLASS)
-private multiPropertyClass_ ::= (propertyClass_ WHITESPACE* COMMA WHITESPACE*)* propertyClass_
-property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_) {
+private multiPropertyClass_ ::= (propertyClass_ COMMA)* propertyClass_
+property_info ::= (PROPERTY_NAME OPEN_BRACKET PROPERTY_ALIAS_NAME CLOSE_BRACKET COLON multiPropertyClass_) {
     methods=[getPropertyName getPropertyAliasName getPropertyClassList]
 }
 
-property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) EOL_* (INDENT_SUBPROP sub_property)* {
+property_meta ::= (META_TYPE COLON text_value*) EOL_* (INDENT_SUBPROP sub_property)* {
     methods=[getName getValue]
 }
 
 
 sub_property ::= sub_property_info EOL_* (INDENT_SUBPROPMETA sub_property_meta EOL_*)*
-sub_property_info ::= (PROPERTY_NAME WHITESPACE* OPEN_BRACKET WHITESPACE* PROPERTY_ALIAS_NAME WHITESPACE* CLOSE_BRACKET WHITESPACE* COLON WHITESPACE* multiPropertyClass_) {
+sub_property_info ::= (PROPERTY_NAME OPEN_BRACKET PROPERTY_ALIAS_NAME CLOSE_BRACKET COLON multiPropertyClass_) {
     methods=[getPropertyName getPropertyAliasName getPropertyClassList]
 }
-sub_property_meta ::= (META_TYPE WHITESPACE* COLON WHITESPACE* text_value*) {
+sub_property_meta ::= (META_TYPE COLON text_value*) {
     methods=[getName getValue]
 }

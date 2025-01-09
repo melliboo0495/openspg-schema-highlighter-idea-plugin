@@ -41,6 +41,7 @@ public final class SchemaParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public PsiParser createParser(final Project project) {
+        //return new MySchemaParser();
         return new TraceableSchemaParser();
     }
 

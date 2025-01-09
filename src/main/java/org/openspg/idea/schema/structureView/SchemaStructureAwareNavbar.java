@@ -21,7 +21,6 @@ public class SchemaStructureAwareNavbar extends StructureAwareNavBarModelExtensi
 
     @Override
     public @Nullable String getPresentableText(Object object) {
-        //System.out.println(object.getClass().getName());
         if (object instanceof SchemaFile) {
             return ((SchemaFile) object).getName();
         }

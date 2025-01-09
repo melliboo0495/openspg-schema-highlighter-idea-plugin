@@ -1,5 +1,6 @@
 package org.openspg.idea.lang.lexer;
 
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 
 /* Auto generated File */
@@ -200,7 +201,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 //-------------------------------------------------------------------------------------------------------------------
 // common: white-space, eol, comment
 <NAMESPACE_STATE, ENTITY_STATE, ENTITYMETA_STATE, PROPERTY_STATE, PROPERTYMETA_STATE, ERROR_STATE> {
-    {WHITE_SPACE}*{EOL} {
+    {WHITE_SPACE}* {EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
       }
@@ -210,7 +211,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     {WHITE_SPACE} {
-          return WHITESPACE;
+          return TokenType.WHITE_SPACE;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -219,12 +220,12 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 //-------------------------------------------------------------------------------------------------------------------
 // namespace
 <NAMESPACE_STATE> {
-    "namespace" {
+    ("namespace") {
         return NAMESPACE_MARKER;
     }
 
     {TEXT} {
-          return NAMESPACE_VALUE;
+          return TEXT;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -234,7 +235,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 // common error line
 <ERROR_STATE> {
     {ANY_CHAR} {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -248,7 +249,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     {WHITE_SPACE} {
-          return WHITESPACE;
+          return TokenType.WHITE_SPACE;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -266,7 +267,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 
@@ -307,7 +308,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -326,7 +327,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -344,7 +345,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 
@@ -381,7 +382,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -400,7 +401,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -419,7 +420,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     {WHITE_SPACE} {
-          return WHITESPACE;
+          return TokenType.WHITE_SPACE;
       }
 
     "[[" {
@@ -432,7 +433,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     [^\n] {
-          return BAD_CHAR;
+          return TokenType.BAD_CHARACTER;
       }
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -446,7 +447,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     {WHITE_SPACE} {
-          return WHITESPACE;
+          return TokenType.WHITE_SPACE;
       }
 
     "]]" {

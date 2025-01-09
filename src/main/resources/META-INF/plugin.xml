@@ -72,10 +72,10 @@
         
         <navbar implementation="org.openspg.idea.schema.structureView.SchemaStructureAwareNavbar"/>
         
-        <!--        <lang.formatter-->
-        <!--                language="OpenSPG Schema"-->
-        <!--                implementationClass="org.openspg.idea.language.formatter.SchemaFormattingModelBuilder"/>-->
-        <!--        -->
+        <lang.formatter
+                language="OpenSPG Schema"
+                implementationClass="org.openspg.idea.schema.formatter.SchemaFormattingModelBuilder"/>
+        
         <!--        <codeStyleSettingsProvider-->
         <!--                implementation="org.openspg.idea.language.codeStyleSettings.SchemaCodeStyleSettingsProvider"/>-->
         

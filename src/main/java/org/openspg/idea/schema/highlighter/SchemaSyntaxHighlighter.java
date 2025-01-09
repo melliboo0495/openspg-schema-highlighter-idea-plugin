@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.grammar.psi.SchemaTypes;
@@ -76,7 +77,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
             return OPERATION_SIGN_KEYS;
         }
 
-        if (tokenType.equals(SchemaTypes.BAD_CHAR)) {
+        if (tokenType.equals(TokenType.BAD_CHARACTER)) {
             return ERROR_KEYS;
         }
 

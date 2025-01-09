@@ -15,8 +15,7 @@ public class SchemaBlock extends AbstractBlock {
 
     private final SpacingBuilder spacingBuilder;
 
-    protected SchemaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment,
-                          SpacingBuilder spacingBuilder) {
+    protected SchemaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment, SpacingBuilder spacingBuilder) {
         super(node, wrap, alignment);
         this.spacingBuilder = spacingBuilder;
     }
@@ -27,8 +26,12 @@ public class SchemaBlock extends AbstractBlock {
         ASTNode child = myNode.getFirstChildNode();
         while (child != null) {
             if (child.getElementType() != TokenType.WHITE_SPACE) {
-                Block block = new SchemaBlock(child, Wrap.createWrap(WrapType.NONE, false), Alignment.createAlignment(),
-                        spacingBuilder);
+                Block block = new SchemaBlock(
+                        child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                );
                 blocks.add(block);
             }
             child = child.getTreeNext();
