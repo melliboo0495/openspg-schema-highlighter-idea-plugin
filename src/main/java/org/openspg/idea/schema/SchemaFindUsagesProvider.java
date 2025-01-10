@@ -14,7 +14,7 @@ import org.openspg.idea.lang.psi.SchemaEntityInfo;
 public class SchemaFindUsagesProvider implements FindUsagesProvider {
 
     TokenSet comments = TokenSet.create(
-            SchemaTypes.COMMENT
+            SchemaTypes.COMMENT, SchemaTypes.LINE_COMMENT
     );
 
     TokenSet identifiers = TokenSet.create(

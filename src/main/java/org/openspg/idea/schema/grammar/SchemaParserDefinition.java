@@ -12,6 +12,7 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.grammar.psi.SchemaTypes;
+import org.openspg.idea.lang.parser.SchemaParser;
 import org.openspg.idea.schema.SchemaLanguage;
 import org.openspg.idea.schema.lexer.SchemaLexerAdapter;
 import org.openspg.idea.schema.psi.SchemaFile;
@@ -29,7 +30,7 @@ public final class SchemaParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return TokenSet.create(SchemaTypes.COMMENT);
+        return TokenSet.create(SchemaTypes.COMMENT, SchemaTypes.LINE_COMMENT);
     }
 
     @NotNull
@@ -41,8 +42,7 @@ public final class SchemaParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public PsiParser createParser(final Project project) {
-        //return new MySchemaParser();
-        return new TraceableSchemaParser();
+        return new SchemaParser();
     }
 
     @NotNull

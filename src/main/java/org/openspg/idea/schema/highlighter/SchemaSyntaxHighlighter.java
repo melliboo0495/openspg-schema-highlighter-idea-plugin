@@ -62,7 +62,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
             return KEYWORDS_KEYS;
         }
 
-        if (tokenType.equals(SchemaTypes.COMMENT)) {
+        if (tokenType.equals(SchemaTypes.COMMENT) || tokenType.equals(SchemaTypes.LINE_COMMENT)) {
             return COMMENT_KEYS;
         }
 

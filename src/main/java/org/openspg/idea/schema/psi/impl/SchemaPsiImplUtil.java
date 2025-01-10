@@ -74,12 +74,12 @@ public class SchemaPsiImplUtil {
         return valueNode != null ? valueNode.getPsi() : null;
     }
 
-    public static String getName(SchemaEntityMeta element) {
+    public static String getName(SchemaEntityMetaInfo element) {
         ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.META_TYPE);
         return valueNode != null ? valueNode.getText() : null;
     }
 
-    public static String getValue(SchemaEntityMeta element) {
+    public static String getValue(SchemaEntityMetaInfo element) {
         ASTNode valueNode = element.getNode().findChildByType(SchemaTypes.TEXT);
         return valueNode != null ? valueNode.getText() : null;
     }

@@ -99,9 +99,6 @@ import com.intellij.psi.tree.IElementType;
         yypushback(yylength());
     }
 
-    private void resetEnveriment() {
-    }
-
     //-------------------------------------------------------------------------------------------------------------------
     private void trace(String tag) {
         int tokenStart = getTokenStart();
@@ -147,7 +144,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 %xstate LINE_START_STATE, BLOCK_STATE, PLAIN_BLOCK_STATE
 
 // Small technical one-token states
-%xstate NAMESPACE_STATE, ERROR_STATE
+%xstate NAMESPACE_STATE, LINE_COMMENT_STATE, ERROR_STATE
 
 %xstate ENTITY_STATE, WAITING_ENTITY_ALIAS_NAME_STATE, WAITING_ENTITY_CLASS_STATE
 %xstate ENTITYMETA_STATE
@@ -171,8 +168,8 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
           goToState(NAMESPACE_STATE);
       }
 
-    {WHITE_SPACE} {COMMENT} {
-          return COMMENT;
+    {WHITE_SPACE}* {COMMENT} {
+          goToState(LINE_COMMENT_STATE);
       }
 
     {EOL} {
@@ -185,7 +182,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
               goToState(ERROR_STATE);
           } else {
               yybegin(this.indentState[indentLevel]);
-              this.resetEnveriment();
+              yypushback(yylength() - 1);
               return this.indentToken[indentLevel];
           }
       }
@@ -201,13 +198,28 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 //-------------------------------------------------------------------------------------------------------------------
 // common: white-space, eol, comment
 <NAMESPACE_STATE, ENTITY_STATE, ENTITYMETA_STATE, PROPERTY_STATE, PROPERTYMETA_STATE, ERROR_STATE> {
-    {WHITE_SPACE}* {EOL} {
+    {EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
       }
 
     {COMMENT} {
           return COMMENT;
+      }
+
+    {WHITE_SPACE} {
+          return TokenType.WHITE_SPACE;
+      }
+}
+
+<LINE_COMMENT_STATE> {
+    {EOL} {
+          yybegin(LINE_START_STATE);
+          return EOL;
+      }
+
+    {COMMENT} {
+          return LINE_COMMENT;
       }
 
     {WHITE_SPACE} {
@@ -246,6 +258,10 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
     {WHITE_SPACE}*{EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
+      }
+
+    {COMMENT} {
+          return COMMENT;
       }
 
     {WHITE_SPACE} {

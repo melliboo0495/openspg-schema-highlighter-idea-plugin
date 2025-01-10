@@ -19,14 +19,14 @@ public class SchemaEntityMetaStructureViewElement extends AbstractSchemaStructur
 
     @Override
     public String getNullableAlphaSortKey() {
-        return myElement.getName();
+        return myElement.getEntityMetaInfo().getName();
     }
 
     @Override
     protected PresentationData createPresentation(SchemaEntityMeta element) {
         return new PresentationData(
-                element.getName(),
-                element.getValue(),
+                myElement.getEntityMetaInfo().getName(),
+                myElement.getEntityMetaInfo().getValue(),
                 element.getPropertyList().isEmpty() ? AllIcons.General.GreenCheckmark : AllIcons.Actions.GroupByClass,
                 null
         );
