@@ -8,6 +8,7 @@ An IDEA plugin for OpenSPG schema syntax highlighting
 - Color setting page
 - Line marker
 - Structure view
+- Formatter
 - Commenter
 
 ## To Do List
@@ -15,7 +16,6 @@ An IDEA plugin for OpenSPG schema syntax highlighting
 - Annotator
 - Completion
 - Reference
-- Formatter
 - Code style settings
 - Quick fix
 - Spell checking
