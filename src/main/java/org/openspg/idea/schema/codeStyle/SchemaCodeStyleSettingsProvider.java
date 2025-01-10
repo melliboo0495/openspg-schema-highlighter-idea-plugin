@@ -1,4 +1,4 @@
-package org.openspg.idea.schema.formatter;
+package org.openspg.idea.schema.codeStyle;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
@@ -10,7 +10,7 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.schema.SchemaLanguage;
 
-// TODO
+
 public final class SchemaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
 
     @Override
@@ -38,6 +38,13 @@ public final class SchemaCodeStyleSettingsProvider extends CodeStyleSettingsProv
 
         public SchemaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
             super(SchemaLanguage.INSTANCE, currentSettings, settings);
+        }
+
+        @Override
+        protected void initTabs(CodeStyleSettings settings) {
+            addIndentOptionsTab(settings);
+            addSpacesTab(settings);
+            addBlankLinesTab(settings);
         }
 
     }

@@ -76,12 +76,12 @@
                 language="OpenSPG Schema"
                 implementationClass="org.openspg.idea.schema.formatter.SchemaFormattingModelBuilder"/>
         
-        <!--        <codeStyleSettingsProvider-->
-        <!--                implementation="org.openspg.idea.language.codeStyleSettings.SchemaCodeStyleSettingsProvider"/>-->
+        <codeStyleSettingsProvider
+                implementation="org.openspg.idea.schema.codeStyle.SchemaCodeStyleSettingsProvider"/>
         
-        <!--        <langCodeStyleSettingsProvider-->
-        <!--                implementation="org.openspg.idea.language.codeStyleSettings.SchemaLanguageCodeStyleSettingsProvider"/>-->
-        <!--        -->
+        <langCodeStyleSettingsProvider
+                implementation="org.openspg.idea.schema.codeStyle.SchemaLanguageCodeStyleSettingsProvider"/>
+        
         <lang.commenter
                 language="OpenSPG Schema"
                 implementationClass="org.openspg.idea.schema.SchemaCommenter"/>

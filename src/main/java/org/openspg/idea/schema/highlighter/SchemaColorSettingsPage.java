@@ -8,6 +8,7 @@ import com.intellij.openapi.options.colors.ColorSettingsPage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openspg.idea.schema.SchemaIcons;
+import org.openspg.idea.schema.demo.SchemaDemo;
 
 import javax.swing.*;
 import java.util.Map;
@@ -38,76 +39,7 @@ final class SchemaColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public String getDemoText() {
-        return """
-                namespace SampleDoc
-                
-                # 定义文本块
-                Chunk(文本块): EntityType
-                    properties:
-                        content(内容): Text
-                            index: TextAndVector
-
-                # 定义科室
-                HospitalDepartment(科室): ConceptType
-                    hypernymPredicate: isA
-                HumanBodyPart(人体部位): ConceptType
-                    hypernymPredicate: isA
-                Medicine(药品): EntityType
-                    properties:
-                        desc(描述): Text
-                            index: Text
-                        semanticType(语义类型): Text
-                            index: Text
-                Symptom(症状): EntityType
-                     properties:
-                        desc(描述): Text
-                            index: Text
-                        semanticType(语义类型): Text
-                            index: Text
-                
-                Indicator(医学指征): EntityType
-                    properties:
-                        desc(描述): Text
-                            index: Text
-                        semanticType(语义类型): Text
-                            index: Text
-                
-                Disease(疾病): EntityType
-                    properties:
-                        desc(描述): Text
-                            index: Text
-                        semanticType(语义类型): Text
-                            index: Text
-                        complication(并发症): Disease
-                            constraint: MultiValue
-                        commonSymptom(常见症状): Symptom
-                            constraint: MultiValue
-                        applicableMedicine(适用药品): Medicine
-                            constraint: MultiValue
-                        hospitalDepartment(就诊科室): HospitalDepartment
-                            constraint: MultiValue
-                        diseaseSite(发病部位): HumanBodyPart
-                            constraint: MultiValue
-                    relations:
-                        abnormal(异常指征): Indicator
-                
-                Others(其他): EntityType
-                    properties:
-                        desc(描述): Text
-                            index: TextAndVector
-                        semanticType(语义类型): Text
-                            index: Text
-                
-                Space(场地): EntityType
-                
-                CableProtectionPipe(电缆保护管): EntityType
-                
-                SpecialLightingCable(专用照明电缆): EntityType
-                
-                Runway(跑道) -> Space:
-                    relations:
-                        contains(包含): CableProtectionPipe
-                        contains(包含): SpecialLightingCable""";
+        return SchemaDemo.getHighlighterText();
     }
 
     @Nullable

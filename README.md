@@ -1,6 +1,6 @@
-# openspg-schema-highlighter-idea-plugin
+# OpenSPG Schema Mark Language Highlighter Idea Plugin
 
-An IDEA plugin for OpenSPG schema syntax highlighting
+An IDEA plugin for OpenSPG schema mark language syntax highlighting
 
 ## Features:
 
@@ -9,14 +9,14 @@ An IDEA plugin for OpenSPG schema syntax highlighting
 - Line marker
 - Structure view
 - Formatter
+- Code style settings
 - Commenter
 
-## To Do List
+## TODO
 
 - Annotator
 - Completion
 - Reference
-- Code style settings
 - Quick fix
 - Spell checking
 - Graph Viewer
