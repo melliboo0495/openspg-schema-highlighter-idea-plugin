@@ -44,7 +44,7 @@ private inheritedEntityClass_ ::= INHERITED ((ENTITY_BUILDIN_CLASS|ENTITY_CLASS)
 
 entity_meta ::= entity_meta_info EOL_* property*
 
-entity_meta_info ::= INDENT_META META_TYPE COLON text_value* {
+entity_meta_info ::= INDENT_META META_TYPE COLON (BUILDIN_TYPE|text_value*)? {
     methods=[getName getValue]
 }
 
@@ -58,7 +58,7 @@ private multiPropertyClass_ ::= (propertyClass_ COMMA)* propertyClass_
 property_meta ::= property_meta_info EOL_* (sub_property)* {
     methods=[getName getValue]
 }
-property_meta_info ::= INDENT_PROPMETA META_TYPE COLON (text_value | BUILDIN_TYPE)*
+property_meta_info ::= INDENT_PROPMETA META_TYPE COLON (BUILDIN_TYPE | text_value)*
 
 sub_property ::= sub_property_info EOL_* (sub_property_meta EOL_*)*
 sub_property_info ::= (INDENT_SUBPROP PROPERTY_NAME OPEN_BRACKET PROPERTY_ALIAS_NAME CLOSE_BRACKET COLON multiPropertyClass_) {

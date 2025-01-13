@@ -15,7 +15,12 @@ import java.util.Collection;
 final class SchemaCompletionContributor extends CompletionContributor {
 
     SchemaCompletionContributor() {
-        // extend EntityType (level 1) completion
+        this.extendCompletionForEntityClass();
+        this.extendCompletionForPropertyClass();
+        this.extendCompletionForBuildinType();
+    }
+
+    private void extendCompletionForEntityClass() {
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.ENTITY_CLASS),
                 new CompletionProvider<>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
@@ -41,9 +46,10 @@ final class SchemaCompletionContributor extends CompletionContributor {
                     }
                 }
         );
+    }
 
-        // extend AttrType/SubPropType completion
-        CompletionProvider<CompletionParameters> attrTypeProvider = new CompletionProvider<>() {
+    private void extendCompletionForPropertyClass() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.PROPERTY_CLASS), new CompletionProvider<>() {
             public void addCompletions(@NotNull CompletionParameters parameters,
                                        @NotNull ProcessingContext context,
                                        @NotNull CompletionResultSet resultSet) {
@@ -51,26 +57,23 @@ final class SchemaCompletionContributor extends CompletionContributor {
                 resultSet.addElement(LookupElementBuilder.create("Float"));
                 resultSet.addElement(LookupElementBuilder.create("Integer"));
             }
-        };
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.PROPERTY_CLASS), attrTypeProvider);
+        });
+    }
 
-        // TODO: extend any elements completion
-        //CompletionProvider<CompletionParameters> metaProvider = new CompletionProvider<>() {
-        //    public void addCompletions(@NotNull CompletionParameters parameters,
-        //                               @NotNull ProcessingContext context,
-        //                               @NotNull CompletionResultSet resultSet) {
-        //        resultSet.addElement(LookupElementBuilder.create("desc"));
-        //        resultSet.addElement(LookupElementBuilder.create("properties"));
-        //        resultSet.addElement(LookupElementBuilder.create("relations"));
-        //        resultSet.addElement(LookupElementBuilder.create("hypernymPredicate"));
-        //        resultSet.addElement(LookupElementBuilder.create("constraint"));
-        //        resultSet.addElement(LookupElementBuilder.create("rule"));
-        //    }
-        //};
-        //extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.TEXT), metaProvider);
-        //extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.ATTRIBUTE_META), metaProvider);
-        //extend(CompletionType.BASIC, PlatformPatterns.psiElement(SchemaTypes.SUB_PROPERTY_META), metaProvider);
+    private void extendCompletionForBuildinType() {
+        extend(CompletionType.SMART, PlatformPatterns.psiElement(SchemaTypes.BUILDIN_TYPE), new CompletionProvider<>() {
+            public void addCompletions(@NotNull CompletionParameters parameters,
+                                       @NotNull ProcessingContext context,
+                                       @NotNull CompletionResultSet resultSet) {
+                PsiElement parentElement = parameters.getPosition().getParent();
+                System.out.println("======== extendCompletionForPropertyValue:");
+                System.out.println(parentElement.getText().replace("\n", "\\n"));
 
+                //resultSet.addElement(LookupElementBuilder.create("Text"));
+                //resultSet.addElement(LookupElementBuilder.create("Float"));
+                //resultSet.addElement(LookupElementBuilder.create("Integer"));
+            }
+        });
     }
 
 }

@@ -58,32 +58,7 @@ public class SchemaBlock extends AbstractBlock {
     @Nullable
     @Override
     public Spacing getSpacing(@Nullable Block firstChild, @NotNull Block secondChild) {
-        System.out.println("===============================");
-        if (firstChild != null) {
-            System.out.println("--- firstChild: " + firstChild.getClass().getSimpleName());
-            if (firstChild instanceof SchemaBlock block) {
-                System.out.println("   " + block.getNode().getElementType());
-            }
-        }
-
-        System.out.println("--- secondChild: " + secondChild.getClass().getSimpleName());
-        if (secondChild instanceof SchemaBlock block) {
-            System.out.println("   " + block.getNode().getElementType());
-        }
-
-        Spacing spacing = spacingBuilder.getSpacing(this, firstChild, secondChild);
-        if (spacing != null) {
-            if (spacing instanceof SpacingImpl impl) {
-                System.out.println("<Spacing: minSpaces=" + impl.getMinSpaces()
-                        + " maxSpaces=" + impl.getMaxSpaces()
-                        + " minLineFeeds=" + impl.getMinLineFeeds()
-                        + " keepBlankLines=" + impl.getKeepBlankLines()
-                        + ">");
-            } else {
-                System.out.println(spacing);
-            }
-        }
-        return spacing;
+        return spacingBuilder.getSpacing(this, firstChild, secondChild);
     }
 
     @Override

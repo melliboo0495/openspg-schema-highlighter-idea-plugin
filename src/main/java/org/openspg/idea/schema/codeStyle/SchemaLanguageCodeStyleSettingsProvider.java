@@ -18,7 +18,6 @@ public final class SchemaLanguageCodeStyleSettingsProvider extends LanguageCodeS
 
     @Override
     public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
-        System.out.println(settingsType);
         if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
             consumer.showStandardOptions("BLANK_LINES_AFTER_PACKAGE");
             consumer.renameStandardOption("BLANK_LINES_AFTER_PACKAGE", "After namespace");

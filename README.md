@@ -4,18 +4,18 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 
 ## Features:
 
-- Syntax highlighter
-- Color setting page
-- Line marker
-- Structure view
-- Formatter
 - Code style settings
+- Color setting page
 - Commenter
+- Completion
+- Formatter
+- Line marker
+- Syntax highlighter
+- Structure view
 
 ## TODO
 
 - Annotator
-- Completion
 - Reference
 - Quick fix
 - Spell checking
