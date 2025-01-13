@@ -30,7 +30,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey CLASS_NAME =
             createTextAttributesKey("SCHEMA_CLASS_NAME", DefaultLanguageHighlighterColors.CLASS_NAME);
     public static final TextAttributesKey CLASS_ALIAS =
-            createTextAttributesKey("SCHEMA_CLASS_ALIAS_NAME", DefaultLanguageHighlighterColors.STATIC_FIELD);
+            createTextAttributesKey("SCHEMA_CLASS_ALIAS_NAME", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey CLASS_REFERENCE =
             createTextAttributesKey("SCHEMA_CLASS_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
 

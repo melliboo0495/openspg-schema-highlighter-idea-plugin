@@ -152,7 +152,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 %xstate PROPERTY_STATE, WAITING_PROPERTY_ALIAS_NAME_STATE, WAITING_PROPERTY_CLASS_STATE
 %xstate PROPERTYMETA_STATE
 
-%xstate WAITING_META_VALUE_STATE
+%xstate WAITING_META_VALUE_STATE, WAITING_META_BUILDIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE
 
 %%
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,33 +425,51 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 
 //-------------------------------------------------------------------------------------------------------------------
 // common meta value
-<WAITING_META_VALUE_STATE> {
-    {WHITE_SPACE}*{EOL} {
+<WAITING_META_VALUE_STATE, WAITING_META_BUILDIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE> {
+    {EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
-      }
-
-    {COMMENT} {
-          return COMMENT;
       }
 
     {WHITE_SPACE} {
           return TokenType.WHITE_SPACE;
       }
 
+    {COMMENT} {
+          return COMMENT;
+      }
+}
+<WAITING_META_VALUE_STATE> {
     "[[" {
           yybegin(PLAIN_BLOCK_STATE);
           return OPEN_PLAIN_BLOCK;
       }
 
-    {TEXT} {
-          return TEXT;
+    ("isA"|"locateAt"|"mannerOf"|"Text"|"Vector"|"TextAndVector"|"NotNull"|"MultiValue") {WHITE_SPACE}* {EOL} {
+          goToState(WAITING_META_BUILDIN_VALUE_STATE);
       }
 
-    [^\n] {
+    [^#\n] {
+          goToState(WAITING_META_TEXT_VALUE_STATE);
+      }
+}
+
+<WAITING_META_BUILDIN_VALUE_STATE> {
+    {TEXT} {
+          return BUILDIN_TYPE;
+      }
+}
+
+<WAITING_META_TEXT_VALUE_STATE> {
+    {TEXT} {
+              return TEXT;
+          }
+
+    [^#\n] {
           return TokenType.BAD_CHARACTER;
       }
 }
+
 //-------------------------------------------------------------------------------------------------------------------
 
 

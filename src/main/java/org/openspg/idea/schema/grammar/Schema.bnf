@@ -58,12 +58,12 @@ private multiPropertyClass_ ::= (propertyClass_ COMMA)* propertyClass_
 property_meta ::= property_meta_info EOL_* (sub_property)* {
     methods=[getName getValue]
 }
-property_meta_info ::= INDENT_PROPMETA META_TYPE COLON text_value*
+property_meta_info ::= INDENT_PROPMETA META_TYPE COLON (text_value | BUILDIN_TYPE)*
 
 sub_property ::= sub_property_info EOL_* (sub_property_meta EOL_*)*
 sub_property_info ::= (INDENT_SUBPROP PROPERTY_NAME OPEN_BRACKET PROPERTY_ALIAS_NAME CLOSE_BRACKET COLON multiPropertyClass_) {
     methods=[getPropertyName getPropertyAliasName getPropertyClassList]
 }
-sub_property_meta ::= (INDENT_SUBPROPMETA META_TYPE COLON text_value*) {
+sub_property_meta ::= (INDENT_SUBPROPMETA META_TYPE COLON (text_value | BUILDIN_TYPE)*) {
     methods=[getName getValue]
 }
