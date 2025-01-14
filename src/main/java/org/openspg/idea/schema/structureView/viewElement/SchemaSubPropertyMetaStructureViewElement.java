@@ -1,10 +1,10 @@
 package org.openspg.idea.schema.structureView.viewElement;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.lang.psi.SchemaSubPropertyMeta;
+import org.openspg.idea.schema.SchemaIcons;
 
 public class SchemaSubPropertyMetaStructureViewElement extends AbstractSchemaStructureViewElement<SchemaSubPropertyMeta> {
 
@@ -22,7 +22,7 @@ public class SchemaSubPropertyMetaStructureViewElement extends AbstractSchemaStr
         return new PresentationData(
                 myElement.getName(),
                 myElement.getValue(),
-                AllIcons.Actions.Checked,
+                SchemaIcons.Nodes.SubPropertyMeta,
                 null);
     }
 

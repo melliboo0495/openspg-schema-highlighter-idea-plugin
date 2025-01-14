@@ -16,7 +16,8 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 ## TODO
 
 - Annotator
-- Reference
 - Quick fix
 - Spell checking
 - Graph Viewer
+- Find Usages
+

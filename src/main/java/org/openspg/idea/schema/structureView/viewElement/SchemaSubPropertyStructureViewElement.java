@@ -1,12 +1,12 @@
 package org.openspg.idea.schema.structureView.viewElement;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.lang.psi.SchemaSubProperty;
 import org.openspg.idea.lang.psi.SchemaSubPropertyMeta;
+import org.openspg.idea.schema.SchemaIcons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class SchemaSubPropertyStructureViewElement extends AbstractSchemaStructu
         return new PresentationData(
                 myElement.getSubPropertyInfo().getPropertyName(),
                 myElement.getSubPropertyInfo().getPropertyAliasName(),
-                AllIcons.Nodes.AnonymousClass,
+                SchemaIcons.Nodes.SubProperty,
                 null
         );
     }

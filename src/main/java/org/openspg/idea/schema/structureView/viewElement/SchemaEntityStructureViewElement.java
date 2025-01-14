@@ -1,6 +1,5 @@
 package org.openspg.idea.schema.structureView.viewElement;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -8,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.lang.psi.SchemaEntity;
 import org.openspg.idea.lang.psi.SchemaEntityInfo;
 import org.openspg.idea.lang.psi.SchemaEntityMeta;
+import org.openspg.idea.schema.SchemaIcons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class SchemaEntityStructureViewElement extends AbstractSchemaStructureVie
         return new PresentationData(
                 info.getEntityName(),
                 info.getEntityAliasName(),
-                AllIcons.Nodes.Class,
+                SchemaIcons.Nodes.Entity,
                 null
         );
     }

@@ -1,13 +1,13 @@
 package org.openspg.idea.schema.structureView;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.navigationToolbar.StructureAwareNavBarModelExtension;
 import com.intellij.lang.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openspg.idea.lang.psi.SchemaEntityInfo;
-import org.openspg.idea.schema.psi.SchemaFile;
+import org.openspg.idea.schema.SchemaIcons;
 import org.openspg.idea.schema.SchemaLanguage;
+import org.openspg.idea.schema.psi.SchemaFile;
 
 import javax.swing.*;
 
@@ -36,7 +36,7 @@ public class SchemaStructureAwareNavbar extends StructureAwareNavBarModelExtensi
     @Nullable
     public Icon getIcon(Object object) {
         if (object instanceof SchemaEntityInfo) {
-            return AllIcons.Nodes.Class;
+            return SchemaIcons.Nodes.Entity;
         }
 
         return null;

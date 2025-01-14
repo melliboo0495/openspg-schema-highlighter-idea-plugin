@@ -1,12 +1,12 @@
 package org.openspg.idea.schema.structureView.viewElement;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.lang.psi.SchemaEntityMeta;
 import org.openspg.idea.lang.psi.SchemaProperty;
+import org.openspg.idea.schema.SchemaIcons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class SchemaEntityMetaStructureViewElement extends AbstractSchemaStructur
         return new PresentationData(
                 myElement.getEntityMetaInfo().getName(),
                 myElement.getEntityMetaInfo().getValue(),
-                element.getPropertyList().isEmpty() ? AllIcons.General.GreenCheckmark : AllIcons.Actions.GroupByClass,
+                element.getPropertyList().isEmpty() ? SchemaIcons.Nodes.EmptyMeta : SchemaIcons.Nodes.EntityMeta,
                 null
         );
     }
