@@ -15,12 +15,12 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 - Reference
 - Syntax highlighter
 - Structure view
+- Preview
 
 ## TODO
 
 - Annotator
 - Quick fix
 - Spell checking
-- Preview
 - Find usages
 - [Live template](https://plugins.jetbrains.com/docs/intellij/live-templates.html)
