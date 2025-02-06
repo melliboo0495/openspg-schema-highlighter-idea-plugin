@@ -1,15 +1,10 @@
 package org.openspg.idea.schema.ui.editor;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.impl.EditorColorsSchemeImpl;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.components.ScrollBarPainter;
 import com.intellij.ui.jcef.JCEFHtmlPanel;
 import com.intellij.util.Url;
 import com.intellij.util.Urls;
@@ -24,7 +19,6 @@ import org.openspg.idea.schema.ui.editor.jcef.SchemaResourceRequestHandler;
 import org.openspg.idea.schema.ui.editor.server.PreviewStaticServer;
 import org.openspg.idea.schema.ui.editor.server.ResourcesController;
 import org.openspg.idea.schema.util.EditorUtils;
-import org.openspg.idea.schema.util.UIUtils;
 
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
@@ -117,44 +111,44 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
         super.dispose();
     }
 
-    private String getStyle(boolean isTag) {
-        try {
-            EditorColorsSchemeImpl editorColorsScheme = (EditorColorsSchemeImpl) EditorColorsManager.getInstance().getGlobalScheme();
-            Color defaultBackground = editorColorsScheme.getDefaultBackground();
-
-            Color scrollbarThumbColor = ScrollBarPainter.THUMB_OPAQUE_BACKGROUND.getDefaultColor();
-            if (editorColorsScheme.getColor(ScrollBarPainter.THUMB_OPAQUE_BACKGROUND) != null) {
-                scrollbarThumbColor = editorColorsScheme.getColor(ScrollBarPainter.THUMB_OPAQUE_BACKGROUND);
-            }
-            TextAttributes textAttributes = editorColorsScheme.getDirectlyDefinedAttributes().get("TEXT");
-            Color text = null;
-            if (textAttributes != null) {
-                text = textAttributes.getForegroundColor();
-            }
-            String fontFamily = "font-family:\"" + editorColorsScheme.getEditorFontName() + "\",\"Helvetica Neue\",\"Luxi Sans\",\"DejaVu Sans\"," +
-                    "\"Hiragino Sans GB\",\"Microsoft Yahei\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",\"Segoe UI Symbol\"," +
-                    "\"Android Emoji\",\"EmojiSymbols\";";
-            StringBuilder sb = new StringBuilder(isTag ? "<style id=\"ideaStyle\">": "");
-            sb.append(UIUtils.isDarkTheme() ? ".vditor--dark": ".vditor").append("{--panel-background-color:").append(toHexColor(defaultBackground))
-                    .append(";--textarea-background-color:").append(toHexColor(defaultBackground)).append(";");
-            sb.append("--toolbar-background-color:").append(toHexColor(JBColor.background())).append(";");
-            sb.append("}");
-            sb.append("::-webkit-scrollbar-track {background-color:").append(toHexColor(defaultBackground)).append(";}");
-            sb.append("::-webkit-scrollbar-thumb {background-color:").append(toHexColor(scrollbarThumbColor)).append(";}");
-            sb.append(".vditor-reset {font-size:").append(editorColorsScheme.getEditorFontSize()).append("px;");
-            sb.append(fontFamily);
-            if (text != null) {
-                sb.append("color:").append(toHexColor(text)).append(";");
-            }
-            sb.append("}");
-            sb.append(" body{background-color: ").append(toHexColor(defaultBackground)).append(";}");
-            sb.append(isTag ? "</style>": "");
-            return sb.toString();
-        } catch (Exception e) {
-            return "";
-        }
-
-    }
+    //private String getStyle(boolean isTag) {
+    //    try {
+    //        EditorColorsSchemeImpl editorColorsScheme = (EditorColorsSchemeImpl) EditorColorsManager.getInstance().getGlobalScheme();
+    //        Color defaultBackground = editorColorsScheme.getDefaultBackground();
+    //
+    //        Color scrollbarThumbColor = ScrollBarPainter.THUMB_OPAQUE_BACKGROUND.getDefaultColor();
+    //        if (editorColorsScheme.getColor(ScrollBarPainter.THUMB_OPAQUE_BACKGROUND) != null) {
+    //            scrollbarThumbColor = editorColorsScheme.getColor(ScrollBarPainter.THUMB_OPAQUE_BACKGROUND);
+    //        }
+    //        TextAttributes textAttributes = editorColorsScheme.getDirectlyDefinedAttributes().get("TEXT");
+    //        Color text = null;
+    //        if (textAttributes != null) {
+    //            text = textAttributes.getForegroundColor();
+    //        }
+    //        String fontFamily = "font-family:\"" + editorColorsScheme.getEditorFontName() + "\",\"Helvetica Neue\",\"Luxi Sans\",\"DejaVu Sans\"," +
+    //                "\"Hiragino Sans GB\",\"Microsoft Yahei\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",\"Segoe UI Symbol\"," +
+    //                "\"Android Emoji\",\"EmojiSymbols\";";
+    //        StringBuilder sb = new StringBuilder(isTag ? "<style id=\"ideaStyle\">": "");
+    //        sb.append(UIUtils.isDarkTheme() ? ".vditor--dark": ".vditor").append("{--panel-background-color:").append(toHexColor(defaultBackground))
+    //                .append(";--textarea-background-color:").append(toHexColor(defaultBackground)).append(";");
+    //        sb.append("--toolbar-background-color:").append(toHexColor(JBColor.background())).append(";");
+    //        sb.append("}");
+    //        sb.append("::-webkit-scrollbar-track {background-color:").append(toHexColor(defaultBackground)).append(";}");
+    //        sb.append("::-webkit-scrollbar-thumb {background-color:").append(toHexColor(scrollbarThumbColor)).append(";}");
+    //        sb.append(".vditor-reset {font-size:").append(editorColorsScheme.getEditorFontSize()).append("px;");
+    //        sb.append(fontFamily);
+    //        if (text != null) {
+    //            sb.append("color:").append(toHexColor(text)).append(";");
+    //        }
+    //        sb.append("}");
+    //        sb.append(" body{background-color: ").append(toHexColor(defaultBackground)).append(";}");
+    //        sb.append(isTag ? "</style>": "");
+    //        return sb.toString();
+    //    } catch (Exception e) {
+    //        return "";
+    //    }
+    //
+    //}
 
     private String toHexColor(Color color) {
         DecimalFormat df = new DecimalFormat("0.00");
@@ -162,12 +156,6 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
         dfs.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(dfs);
         return String.format("rgba(%s,%s,%s,%s)", color.getRed(), color.getGreen(), color.getBlue(), df.format(color.getAlpha() / (float) 255));
-    }
-
-    public void updateStyle() {
-        String style = getStyle(false);
-        getCefBrowser().executeJavaScript(
-                "updateStyle('" + style + "'," + UIUtils.isDarkTheme() + ");", getCefBrowser().getURL(), 0);
     }
 
     public void updateSchema() {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
@@ -44,7 +46,7 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("203.0")
+        sinceBuild.set("222")
         untilBuild.set("")
     }
 

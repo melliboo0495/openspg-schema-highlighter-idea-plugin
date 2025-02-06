@@ -50,7 +50,8 @@ public class SchemaPreviewEditor extends UserDataHolderBase implements FileEdito
                 .connect(this)
                 .subscribe(EditorColorsManager.TOPIC, (EditorColorsListener) scheme -> {
                     if (myPanel != null) {
-                        myPanel.updateStyle();
+                        //TODO:
+                        //myPanel.updateStyle();
                     }
                 });
 
