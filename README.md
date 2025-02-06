@@ -2,6 +2,8 @@
 
 An IDEA plugin for OpenSPG schema mark language syntax highlighting
 
+## Plugin Card
+
 ## Features:
 
 - Code style settings
@@ -10,6 +12,7 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 - Completion
 - Formatter
 - Line marker
+- Reference
 - Syntax highlighter
 - Structure view
 
@@ -18,6 +21,6 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 - Annotator
 - Quick fix
 - Spell checking
-- Graph Viewer
-- Find Usages
-
+- Preview
+- Find usages
+- [Live template](https://plugins.jetbrains.com/docs/intellij/live-templates.html)

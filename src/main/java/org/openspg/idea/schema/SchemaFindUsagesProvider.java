@@ -29,25 +29,18 @@ public class SchemaFindUsagesProvider implements FindUsagesProvider {
 
     @Override
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-        //boolean result = psiElement.getNode().getElementType() == SchemaTypes.ENTITY_INFO;
-        boolean result = psiElement instanceof PsiNamedElement;
-        //return psiElement instanceof SchemaEntityInfo;
-        System.out.println("canFindUsagesFor: " + psiElement);
-        System.out.println("      : " + result);
-        return result;
+        return psiElement instanceof PsiNamedElement;
     }
 
     @Nullable
     @Override
     public String getHelpId(@NotNull PsiElement psiElement) {
-        System.out.println("getHelpId: " + psiElement);
         return "getHelpId: reference.dialogs.schema";
     }
 
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-        System.out.println("getType: " + element);
         if (element instanceof SchemaEntityInfo) {
             return "Schema Entity";
         }
@@ -57,7 +50,6 @@ public class SchemaFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        System.out.println("getDescriptiveName: " + element);
         if (element instanceof SchemaEntityInfo info) {
             return info.getEntityName();
         }

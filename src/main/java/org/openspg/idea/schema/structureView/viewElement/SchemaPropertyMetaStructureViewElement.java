@@ -19,15 +19,15 @@ public class SchemaPropertyMetaStructureViewElement extends AbstractSchemaStruct
 
     @Override
     public String getNullableAlphaSortKey() {
-        return myElement.getName();
+        return myElement.getPropertyMetaInfo().getName();
     }
 
     @Override
     protected PresentationData createPresentation(SchemaPropertyMeta element) {
         return new PresentationData(
-                element.getName(),
-                element.getValue(),
-                element.getSubPropertyList().isEmpty() ? SchemaIcons.Nodes.EmptyMeta : SchemaIcons.Nodes.PropertyMeta,
+                element.getPropertyMetaInfo().getName(),
+                element.getPropertyMetaInfo().getValue(),
+                element.getSubPropertyList().isEmpty() ? SchemaIcons.Nodes.EmptyMeta: SchemaIcons.Nodes.PropertyMeta,
                 null
         );
     }

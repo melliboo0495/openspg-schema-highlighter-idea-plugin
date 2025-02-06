@@ -20,9 +20,21 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.java</depends>
     
+    <extensionPoints>
+        <extensionPoint qualifiedName="org.openspg.schema.previewEditorProvider"
+                        interface="com.intellij.openapi.fileEditor.FileEditorProvider"
+                        dynamic="true"/>
+        
+        <extensionPoint qualifiedName="org.openspg.schema.htmlPanelProvider"
+                        interface="org.openspg.idea.schema.ui.editor.SchemaHtmlPanelProvider"
+                        dynamic="true"/>
+    </extensionPoints>
+    
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+        
+        <applicationService serviceImplementation="org.openspg.idea.schema.settings.SchemaSettings"/>
         
         <fileType
                 name="OpenSPG Schema File"
@@ -54,13 +66,13 @@
                 language="OpenSPG Schema"
                 implementationClass="org.openspg.idea.schema.completion.SchemaCompletionContributor"/>
         
-<!--        <psi.referenceContributor-->
-<!--                language="OpenSPG Schema"-->
-<!--                implementation="org.openspg.idea.schema.reference.SchemaReferenceContributor"/>-->
-<!--        -->
-<!--        <lang.findUsagesProvider-->
-<!--                language="OpenSPG Schema"-->
-<!--                implementationClass="org.openspg.idea.schema.SchemaFindUsagesProvider"/>-->
+        <!--        <psi.referenceContributor-->
+        <!--                language="OpenSPG Schema"-->
+        <!--                implementation="org.openspg.idea.schema.reference.SchemaReferenceContributor"/>-->
+        <!--        -->
+        <!--        <lang.findUsagesProvider-->
+        <!--                language="OpenSPG Schema"-->
+        <!--                implementationClass="org.openspg.idea.schema.SchemaFindUsagesProvider"/>-->
         
         <!--        <lang.foldingBuilder-->
         <!--                language="JAVA"-->
@@ -85,6 +97,16 @@
         <lang.commenter
                 language="OpenSPG Schema"
                 implementationClass="org.openspg.idea.schema.SchemaCommenter"/>
+        
+        <httpRequestHandler implementation="org.openspg.idea.schema.ui.editor.server.PreviewStaticServer"/>
+        <fileEditorProvider id="schema-preview-editor" implementation="org.openspg.idea.schema.ui.editor.SchemaSplitEditorProvider"/>
     
     </extensions>
+    
+    <extensions defaultExtensionNs="org.openspg.schema">
+        <previewEditorProvider implementation="org.openspg.idea.schema.ui.editor.SchemaPreviewEditorProvider"/>
+        <htmlPanelProvider implementation="org.openspg.idea.schema.ui.preview.editor.jcef.SchemaJCEFHtmlPanelProvider"/>
+    </extensions>
+
+
 </idea-plugin>

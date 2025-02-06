@@ -17,7 +17,7 @@ final class SchemaCompletionContributor extends CompletionContributor {
     SchemaCompletionContributor() {
         this.extendCompletionForEntityClass();
         this.extendCompletionForPropertyClass();
-        this.extendCompletionForBuildinType();
+        this.extendCompletionForBuiltinType();
     }
 
     private void extendCompletionForEntityClass() {
@@ -60,14 +60,12 @@ final class SchemaCompletionContributor extends CompletionContributor {
         });
     }
 
-    private void extendCompletionForBuildinType() {
-        extend(CompletionType.SMART, PlatformPatterns.psiElement(SchemaTypes.BUILDIN_TYPE), new CompletionProvider<>() {
+    private void extendCompletionForBuiltinType() {
+        extend(CompletionType.SMART, PlatformPatterns.psiElement(SchemaTypes.BUILTIN_TYPE), new CompletionProvider<>() {
             public void addCompletions(@NotNull CompletionParameters parameters,
                                        @NotNull ProcessingContext context,
                                        @NotNull CompletionResultSet resultSet) {
-                PsiElement parentElement = parameters.getPosition().getParent();
-                System.out.println("======== extendCompletionForPropertyValue:");
-                System.out.println(parentElement.getText().replace("\n", "\\n"));
+                //PsiElement parentElement = parameters.getPosition().getParent();
 
                 //resultSet.addElement(LookupElementBuilder.create("Text"));
                 //resultSet.addElement(LookupElementBuilder.create("Float"));

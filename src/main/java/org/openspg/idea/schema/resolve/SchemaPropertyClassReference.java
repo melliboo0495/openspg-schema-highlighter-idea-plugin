@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openspg.idea.grammar.psi.SchemaTypes;
 import org.openspg.idea.lang.psi.SchemaEntity;
 import org.openspg.idea.lang.psi.SchemaReferencablePropertyClass;
-import org.openspg.idea.schema.psi.impl.SchemaPsiImplUtil;
+import org.openspg.idea.schema.util.PsiUtils;
 
 public class SchemaPropertyClassReference extends PsiReferenceBase<SchemaReferencablePropertyClass> {
 
@@ -22,7 +22,7 @@ public class SchemaPropertyClassReference extends PsiReferenceBase<SchemaReferen
 
     @Override
     public @Nullable PsiElement resolve() {
-        final SchemaEntity entity = SchemaPsiImplUtil.findEntityByName(myElement.getContainingFile(), entityName);
+        final SchemaEntity entity = PsiUtils.findEntityByName(myElement.getContainingFile(), entityName);
         if (entity != null) {
             ASTNode node = entity.getEntityInfo().getReferencableEntityName().getNode().findChildByType(SchemaTypes.ENTITY_NAME);
             assert node != null;

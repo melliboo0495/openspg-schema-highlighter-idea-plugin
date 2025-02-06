@@ -5,10 +5,14 @@ plugins {
 }
 
 group = "org.openspg.idea"
-version = "0.0.2"
+version = "0.0.3"
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation("com.alibaba:fastjson:1.2.47")
 }
 
 sourceSets {
@@ -40,8 +44,8 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("223")
-        untilBuild.set("243.*")
+        sinceBuild.set("203.0")
+        untilBuild.set("")
     }
 
     signPlugin {

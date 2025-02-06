@@ -13,7 +13,7 @@ import org.openspg.idea.grammar.psi.SchemaTypes;
 import org.openspg.idea.lang.psi.SchemaEntity;
 import org.openspg.idea.lang.psi.SchemaReferencableEntityName;
 import org.openspg.idea.schema.SchemaIcons;
-import org.openspg.idea.schema.psi.impl.SchemaPsiImplUtil;
+import org.openspg.idea.schema.util.PsiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class SchemaEntityNameReference extends PsiPolyVariantReferenceBase<Schem
     public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         List<ResolveResult> results = new ArrayList<>();
 
-        List<PsiElement> elements = SchemaPsiImplUtil.searchChildrenOfAnyType(
+        List<PsiElement> elements = PsiUtils.searchChildrenOfAnyType(
                 myElement.getContainingFile(),
                 true,
                 SchemaTypes.ENTITY_CLASS,

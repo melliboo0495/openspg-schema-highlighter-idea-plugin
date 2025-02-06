@@ -152,7 +152,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 %xstate PROPERTY_STATE, WAITING_PROPERTY_ALIAS_NAME_STATE, WAITING_PROPERTY_CLASS_STATE
 %xstate PROPERTYMETA_STATE
 
-%xstate WAITING_META_VALUE_STATE, WAITING_META_BUILDIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE
+%xstate WAITING_META_VALUE_STATE, WAITING_META_BUILTIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE
 
 %%
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,7 +304,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 
 <WAITING_ENTITY_CLASS_STATE> {
     "EntityType" | "ConceptType" | "EventType" | "StandardType" | "BasicType" {
-          return ENTITY_BUILDIN_CLASS;
+          return ENTITY_BUILTIN_CLASS;
       }
 
     "," {
@@ -382,7 +382,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 
 <WAITING_PROPERTY_CLASS_STATE> {
     "EntityType" | "ConceptType" | "EventType" | "StandardType" | "Integer" | "Text" | "Float" {
-          return BUILDIN_TYPE;
+          return BUILTIN_TYPE;
       }
 
     "," {
@@ -425,7 +425,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 
 //-------------------------------------------------------------------------------------------------------------------
 // common meta value
-<WAITING_META_VALUE_STATE, WAITING_META_BUILDIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE> {
+<WAITING_META_VALUE_STATE, WAITING_META_BUILTIN_VALUE_STATE, WAITING_META_TEXT_VALUE_STATE> {
     {EOL} {
           yybegin(LINE_START_STATE);
           return EOL;
@@ -446,7 +446,7 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 
     ("isA"|"locateAt"|"mannerOf"|"Text"|"Vector"|"TextAndVector"|"NotNull"|"MultiValue") {WHITE_SPACE}* {EOL} {
-          goToState(WAITING_META_BUILDIN_VALUE_STATE);
+          goToState(WAITING_META_BUILTIN_VALUE_STATE);
       }
 
     [^#\n] {
@@ -454,9 +454,9 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
       }
 }
 
-<WAITING_META_BUILDIN_VALUE_STATE> {
+<WAITING_META_BUILTIN_VALUE_STATE> {
     {TEXT} {
-          return BUILDIN_TYPE;
+          return BUILTIN_TYPE;
       }
 }
 

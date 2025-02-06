@@ -55,8 +55,8 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         if (tokenType.equals(SchemaTypes.NAMESPACE_MARKER)
-                || tokenType.equals(SchemaTypes.ENTITY_BUILDIN_CLASS)
-                || tokenType.equals(SchemaTypes.BUILDIN_TYPE)
+                || tokenType.equals(SchemaTypes.ENTITY_BUILTIN_CLASS)
+                || tokenType.equals(SchemaTypes.BUILTIN_TYPE)
                 || tokenType.equals(SchemaTypes.META_TYPE)
         ) {
             return KEYWORDS_KEYS;
