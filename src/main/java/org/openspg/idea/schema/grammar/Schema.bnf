@@ -18,7 +18,7 @@
 
 schemaFile ::= item_*
 
-private item_ ::= namespace|entity|DOCUMENT_END|COMMENT|LINE_COMMENT|indent_|EOL|TEXT
+private item_ ::= namespace|entity|COMMENT|LINE_COMMENT|indent_|EOL|TEXT
 
 private indent_ ::= INDENT|INDENT_META|INDENT_PROP|INDENT_PROPMETA|INDENT_SUBPROP|INDENT_SUBPROPMETA
 

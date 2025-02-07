@@ -97,7 +97,7 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
 
         } else {
             String schemaString = EditorUtils.fileToJsonString(psiFile);
-            logger.warn(schemaString.substring(0, 200));
+            logger.warn(schemaString.substring(0, Math.min(160, schemaString.length())));
             String dataString = "{\"code\":0,\"message\":\"success\",\"data\":" + schemaString + "}";
             this.resourceBytes = dataString.getBytes(StandardCharsets.UTF_8);
         }

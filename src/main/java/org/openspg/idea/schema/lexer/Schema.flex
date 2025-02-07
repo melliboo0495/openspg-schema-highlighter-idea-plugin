@@ -461,12 +461,9 @@ TEXT =                          {DSTRING}|{STRING}|{NAME}
 }
 
 <WAITING_META_TEXT_VALUE_STATE> {
-    {TEXT} {
-              return TEXT;
-          }
-
-    [^#\n] {
-          return TokenType.BAD_CHARACTER;
+    [^#\n]+ {
+          //return TokenType.BAD_CHARACTER;
+          return TEXT;
       }
 }
 

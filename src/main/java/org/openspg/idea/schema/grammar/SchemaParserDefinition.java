@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,13 @@ public final class SchemaParserDefinition implements ParserDefinition {
     @Override
     public TokenSet getCommentTokens() {
         return TokenSet.create(SchemaTypes.COMMENT, SchemaTypes.LINE_COMMENT);
+    }
+
+    @NotNull
+    @Override
+    public TokenSet getWhitespaceTokens() {
+        //return TokenSet.WHITE_SPACE;
+        return TokenSet.create(TokenType.WHITE_SPACE, TokenType.BAD_CHARACTER);
     }
 
     @NotNull
