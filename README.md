@@ -2,7 +2,13 @@
 
 An IDEA plugin for OpenSPG schema mark language syntax highlighting
 
-## Plugin Card
+- [JETBRAINS Marketplace](https://plugins.jetbrains.com/plugin/26288-openspg-schema-mark-language-highlighter/)
+
+## Preview
+
+<div align="center">
+    <img src="./docs/resources/screenshot.png" width="800px" alt="screenshot"></img>
+</div>
 
 ## Features:
 
