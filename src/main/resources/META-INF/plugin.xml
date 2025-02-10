@@ -105,7 +105,6 @@
     
     <extensions defaultExtensionNs="org.openspg.schema">
         <previewEditorProvider implementation="org.openspg.idea.schema.ui.editor.SchemaPreviewEditorProvider"/>
-        <htmlPanelProvider implementation="org.openspg.idea.schema.ui.preview.editor.jcef.SchemaJCEFHtmlPanelProvider"/>
     </extensions>
 
 

@@ -17,7 +17,7 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 
 public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    public static final TextAttributesKey KEYWORDS =
+    public static final TextAttributesKey KEYWORD =
             createTextAttributesKey("SCHEMA_KEYWORDS", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey COMMENT =
             createTextAttributesKey("SCHEMA_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
@@ -27,22 +27,22 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey OPERATION_SIGN =
             createTextAttributesKey("SCHEMA_OPERATION_SIGN", DefaultLanguageHighlighterColors.OPERATION_SIGN);
 
-    public static final TextAttributesKey CLASS_NAME =
-            createTextAttributesKey("SCHEMA_CLASS_NAME", DefaultLanguageHighlighterColors.CLASS_NAME);
-    public static final TextAttributesKey CLASS_ALIAS =
-            createTextAttributesKey("SCHEMA_CLASS_ALIAS_NAME", DefaultLanguageHighlighterColors.STRING);
-    public static final TextAttributesKey CLASS_REFERENCE =
-            createTextAttributesKey("SCHEMA_CLASS_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
+    public static final TextAttributesKey ENTITY_NAME =
+            createTextAttributesKey("SCHEMA_ENTITY_NAME", DefaultLanguageHighlighterColors.CLASS_NAME);
+    public static final TextAttributesKey ENTITY_ALIAS =
+            createTextAttributesKey("SCHEMA_ENTITY_ALIAS_NAME", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey ENTITY_REFERENCE =
+            createTextAttributesKey("SCHEMA_ENTITY_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
 
 
-    private static final TextAttributesKey[] KEYWORDS_KEYS = new TextAttributesKey[]{KEYWORDS};
+    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] ERROR_KEYS = new TextAttributesKey[]{ERROR};
     private static final TextAttributesKey[] OPERATION_SIGN_KEYS = new TextAttributesKey[]{OPERATION_SIGN};
 
-    private static final TextAttributesKey[] CLASS_NAME_KEYS = new TextAttributesKey[]{CLASS_NAME};
-    private static final TextAttributesKey[] CLASS_ALIAS_KEYS = new TextAttributesKey[]{CLASS_ALIAS};
-    private static final TextAttributesKey[] CLASS_REFERENCE_KEYS = new TextAttributesKey[]{CLASS_REFERENCE};
+    private static final TextAttributesKey[] ENTITY_NAME_KEYS = new TextAttributesKey[]{ENTITY_NAME};
+    private static final TextAttributesKey[] ENTITY_ALIAS_KEYS = new TextAttributesKey[]{ENTITY_ALIAS};
+    private static final TextAttributesKey[] ENTITY_REFERENCE_KEYS = new TextAttributesKey[]{ENTITY_REFERENCE};
 
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -59,7 +59,7 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(SchemaTypes.BUILTIN_TYPE)
                 || tokenType.equals(SchemaTypes.META_TYPE)
         ) {
-            return KEYWORDS_KEYS;
+            return KEYWORD_KEYS;
         }
 
         if (tokenType.equals(SchemaTypes.COMMENT) || tokenType.equals(SchemaTypes.LINE_COMMENT)) {
@@ -82,19 +82,19 @@ public class SchemaSyntaxHighlighter extends SyntaxHighlighterBase {
         }
 
         if (tokenType.equals(SchemaTypes.ENTITY_NAME)) {
-            return CLASS_NAME_KEYS;
+            return ENTITY_NAME_KEYS;
         }
 
         if (tokenType.equals(SchemaTypes.ENTITY_ALIAS_NAME)
                 || tokenType.equals(SchemaTypes.PROPERTY_ALIAS_NAME)
         ) {
-            return CLASS_ALIAS_KEYS;
+            return ENTITY_ALIAS_KEYS;
         }
 
         if (tokenType.equals(SchemaTypes.PROPERTY_CLASS)
                 || tokenType.equals(SchemaTypes.ENTITY_CLASS)
         ) {
-            return CLASS_REFERENCE_KEYS;
+            return ENTITY_REFERENCE_KEYS;
         }
 
         return EMPTY_KEYS;

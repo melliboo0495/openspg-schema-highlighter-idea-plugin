@@ -13,16 +13,16 @@ import org.cef.network.CefRequest;
 import org.cef.network.CefResponse;
 
 import java.io.IOException;
-import java.util.function.Predicate;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SchemaResourceRequestHandler extends CefResourceRequestHandlerAdapter {
 
-    private final byte[] resource;
-    private final Predicate<HttpRequests.Request> filter;
+    private final List<SchemaResourceSupplier> supplierList = new LinkedList<>();
 
-    public SchemaResourceRequestHandler(byte[] resource, Predicate<HttpRequests.Request> filter) {
-        this.resource = resource;
-        this.filter = filter;
+    public SchemaResourceRequestHandler(SchemaResourceSupplier... suppliers) {
+        supplierList.addAll(Arrays.asList(suppliers));
     }
 
     @Override
@@ -31,39 +31,17 @@ public class SchemaResourceRequestHandler extends CefResourceRequestHandlerAdapt
             return HttpRequests.request(request.getURL())
                     .throwStatusCodeException(false)
                     .connect((HttpRequests.RequestProcessor<CefResourceHandler>) req -> {
-                        if (!filter.test(req)) {
+                        SchemaResourceSupplier supplier = supplierList
+                                .stream()
+                                .filter(x -> x.isSupported(req.getURL()))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (supplier == null) {
                             return null;
                         }
 
-                        return new CefResourceHandlerAdapter() {
-                            private int position = 0;
-
-                            @Override
-                            public boolean processRequest(CefRequest req, CefCallback callback) {
-                                callback.Continue();
-                                return true;
-                            }
-
-                            @Override
-                            public void getResponseHeaders(CefResponse response, IntRef responseLength, StringRef redirectUrl) {
-                                response.setMimeType("application/json; charset=utf-8");
-                                responseLength.set(resource.length);
-                            }
-
-                            @Override
-                            public boolean readResponse(byte[] dataOut, int bytesToRead, IntRef bytesRead, CefCallback callback) {
-                                if (resource.length <= position) {
-                                    bytesRead.set(0);
-                                    return false;
-                                }
-
-                                int chunkSize = Math.min(bytesToRead, resource.length - position);
-                                System.arraycopy(resource, position, dataOut, 0, chunkSize);
-                                position += chunkSize;
-                                bytesRead.set(chunkSize);
-                                return true;
-                            }
-                        };
+                        return createResourceHandler(supplier.getResource(req.getURL()));
                     });
 
         } catch (IOException io) {
@@ -71,4 +49,37 @@ public class SchemaResourceRequestHandler extends CefResourceRequestHandlerAdapt
         }
     }
 
+    protected CefResourceHandler createResourceHandler(SchemaResourceSupplier.Resource resource) {
+        byte[] resourceBytes = resource.getContent();
+
+        return new CefResourceHandlerAdapter() {
+            private int position = 0;
+
+            @Override
+            public boolean processRequest(CefRequest req, CefCallback callback) {
+                callback.Continue();
+                return true;
+            }
+
+            @Override
+            public void getResponseHeaders(CefResponse response, IntRef responseLength, StringRef redirectUrl) {
+                response.setMimeType(resource.getContentType());
+                responseLength.set(resourceBytes.length);
+            }
+
+            @Override
+            public boolean readResponse(byte[] dataOut, int bytesToRead, IntRef bytesRead, CefCallback callback) {
+                if (resourceBytes.length <= position) {
+                    bytesRead.set(0);
+                    return false;
+                }
+
+                int chunkSize = Math.min(bytesToRead, resourceBytes.length - position);
+                System.arraycopy(resourceBytes, position, dataOut, 0, chunkSize);
+                position += chunkSize;
+                bytesRead.set(chunkSize);
+                return true;
+            }
+        };
+    }
 }

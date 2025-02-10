@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.openspg.idea"
-version = "0.0.3"
+version = "0.0.4"
 
 repositories {
     mavenCentral()

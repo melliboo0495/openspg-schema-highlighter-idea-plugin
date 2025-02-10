@@ -16,11 +16,11 @@ import java.util.Map;
 final class SchemaColorSettingsPage implements ColorSettingsPage {
 
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Base//Keywords", SchemaSyntaxHighlighter.KEYWORDS),
+            new AttributesDescriptor("Base//Keywords", SchemaSyntaxHighlighter.KEYWORD),
             new AttributesDescriptor("Base//Operation", SchemaSyntaxHighlighter.OPERATION_SIGN),
-            new AttributesDescriptor("Schema//Name", SchemaSyntaxHighlighter.CLASS_NAME),
-            new AttributesDescriptor("Schema//Alias name", SchemaSyntaxHighlighter.CLASS_ALIAS),
-            new AttributesDescriptor("Schema//Type", SchemaSyntaxHighlighter.CLASS_REFERENCE),
+            new AttributesDescriptor("Schema//Name", SchemaSyntaxHighlighter.ENTITY_NAME),
+            new AttributesDescriptor("Schema//Alias name", SchemaSyntaxHighlighter.ENTITY_ALIAS),
+            new AttributesDescriptor("Schema//Type", SchemaSyntaxHighlighter.ENTITY_REFERENCE),
             new AttributesDescriptor("Others//Comment", SchemaSyntaxHighlighter.COMMENT),
             new AttributesDescriptor("Others//Error", SchemaSyntaxHighlighter.ERROR),
     };

@@ -44,7 +44,7 @@ final class SchemaAnnotator implements Annotator {
         } else {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(element.getTextRange())
-                    .textAttributes(SchemaSyntaxHighlighter.CLASS_REFERENCE)
+                    .textAttributes(SchemaSyntaxHighlighter.ENTITY_REFERENCE)
                     .create();
         }
     }
