@@ -7,7 +7,7 @@ An IDEA plugin for OpenSPG schema mark language syntax highlighting
 ## Preview
 
 <div align="center">
-    <img src="./docs/resources/screenshot.png" width="800px" alt="screenshot"></img>
+    <img src="./docs/resources/screenshot.png" width="1200" alt="screenshot"></img>
 </div>
 
 ## Features:
