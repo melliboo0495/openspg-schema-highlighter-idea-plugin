@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.grammar.psi.SchemaTypes;
 import org.openspg.idea.lang.psi.SchemaEntityInfo;
-import org.openspg.idea.schema.highlighter.SchemaSyntaxHighlighter;
+import org.openspg.idea.schema.highlighter.SchemaHighlightingColors;
 
 import java.util.Collection;
 
@@ -44,7 +44,7 @@ final class SchemaAnnotator implements Annotator {
         } else {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(element.getTextRange())
-                    .textAttributes(SchemaSyntaxHighlighter.ENTITY_REFERENCE)
+                    .textAttributes(SchemaHighlightingColors.ENTITY_REFERENCE)
                     .create();
         }
     }

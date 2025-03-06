@@ -6,8 +6,6 @@ import com.intellij.psi.tree.IElementType;
 /* Auto generated File */
 %%
 
-// Language specification could be found here: http://www.yaml.org/spec/1.2/spec.html
-
 %class SchemaLexer
 %implements com.intellij.lexer.FlexLexer, org.openspg.idea.grammar.psi.SchemaTypes
 %unicode

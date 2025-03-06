@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.NotNull;
-import org.openspg.idea.schema.highlighter.SchemaSyntaxHighlighter;
+import org.openspg.idea.schema.highlighter.SchemaHighlightingColors;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -24,10 +24,10 @@ public class ColorThemeUtils {
             stylesheet.put("--bg-color", toCssColor(editorColorsScheme.getDefaultBackground()));
             stylesheet.put("--text-color", toCssColor(editorColorsScheme.getDefaultForeground()));
 
-            stylesheet.put("--keyword-color", readForegroundColorAsCss(editorColorsScheme, SchemaSyntaxHighlighter.KEYWORD));
-            stylesheet.put("--entity-name-color", readForegroundColorAsCss(editorColorsScheme, SchemaSyntaxHighlighter.ENTITY_NAME));
-            stylesheet.put("--entity-alias-color", readForegroundColorAsCss(editorColorsScheme, SchemaSyntaxHighlighter.ENTITY_ALIAS));
-            stylesheet.put("--entity-reference-color", readForegroundColorAsCss(editorColorsScheme, SchemaSyntaxHighlighter.ENTITY_REFERENCE));
+            stylesheet.put("--keyword-color", readForegroundColorAsCss(editorColorsScheme, SchemaHighlightingColors.KEYWORD));
+            stylesheet.put("--entity-name-color", readForegroundColorAsCss(editorColorsScheme, SchemaHighlightingColors.ENTITY_NAME));
+            stylesheet.put("--entity-alias-color", readForegroundColorAsCss(editorColorsScheme, SchemaHighlightingColors.ENTITY_ALIAS));
+            stylesheet.put("--entity-reference-color", readForegroundColorAsCss(editorColorsScheme, SchemaHighlightingColors.ENTITY_REFERENCE));
 
             StringBuilder sb = new StringBuilder(":root {\n");
             for (Map.Entry<String, String> entry : stylesheet.entrySet()) {
