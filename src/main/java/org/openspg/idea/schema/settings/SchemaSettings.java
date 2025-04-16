@@ -10,7 +10,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 @Service(Service.Level.PROJECT)
@@ -33,25 +32,20 @@ public final class SchemaSettings implements PersistentStateComponent<SchemaSett
         this.verticalSplit = verticalSplit;
     }
 
-    @Nullable
     @Override
-    public SchemaSettings getState() {
+    public @NotNull SchemaSettings getState() {
         return this;
     }
 
     @Override
-    public void loadState(SchemaSettings state) {
+    public void loadState(@NotNull SchemaSettings state) {
         XmlSerializerUtil.copyBean(state, this);
         ApplicationManager.getApplication().getMessageBus().syncPublisher(SchemaSettings.SettingsChangedListener.TOPIC).onSettingsChange(this);
     }
 
 
     public interface SettingsChangedListener {
-        Topic<SettingsChangedListener> TOPIC = Topic.create("PlantUmlApplicationSettingsChanged", SettingsChangedListener.class);
-
-        //static void settingsChanged() {
-        //    ApplicationManager.getApplication().getMessageBus().syncPublisher(TOPIC).onSettingsChange(getInstance());
-        //}
+        Topic<SettingsChangedListener> TOPIC = Topic.create("SchemaApplicationSettingsChanged", SettingsChangedListener.class);
 
         void onSettingsChange(@NotNull SchemaSettings settings);
     }

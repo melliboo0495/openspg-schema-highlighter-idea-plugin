@@ -57,14 +57,18 @@ public class ColorThemeUtils {
     private static String toCssColor(@NotNull Color color) {
         if (color.getAlpha() == 255) {
             return String.format("rgb(%s,%s,%s)", color.getRed(), color.getGreen(), color.getBlue());
-
-        } else {
-            DecimalFormat df = new DecimalFormat("0.00");
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator('.');
-            df.setDecimalFormatSymbols(dfs);
-            return String.format("rgba(%s,%s,%s,%s)", color.getRed(), color.getGreen(), color.getBlue(), df.format(color.getAlpha() / (float) 255));
         }
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(dfs);
+        return String.format("rgba(%s,%s,%s,%s)",
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue(),
+                df.format(color.getAlpha() / (float) 255)
+        );
     }
 
 }

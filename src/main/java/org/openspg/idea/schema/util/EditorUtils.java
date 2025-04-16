@@ -52,10 +52,10 @@ public class EditorUtils {
         return JSONObject.toJSONString(map);
     }
 
-    private static Map<String, Object> normalizeJsonMap(Map<String, Object> data) {
+    private static Map<String, Object> normalizeJsonMap(Map<?, ?> data) {
         Map<String, Object> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            String key = entry.getKey();
+        for (Map.Entry<?, ?> entry : data.entrySet()) {
+            String key = entry.getKey().toString();
             Object value = entry.getValue();
             if (value instanceof String && !((String) value).isEmpty()) {
                 result.put(key, value);
@@ -63,13 +63,13 @@ public class EditorUtils {
             } else if (value instanceof List && !((List<?>) value).isEmpty()) {
                 result.put(key, ((List<?>) value).stream().map(item -> {
                     if (item instanceof Map) {
-                        return normalizeJsonMap((Map<String, Object>) item);
+                        return normalizeJsonMap((Map<?, ?>) item);
                     }
                     return item;
                 }).collect(Collectors.toList()));
 
             } else if (value instanceof Map && !((Map<?, ?>) value).isEmpty()) {
-                result.put(key, normalizeJsonMap((Map<String, Object>) value));
+                result.put(key, normalizeJsonMap((Map<?, ?>) value));
             }
         }
         return result;

@@ -8,7 +8,6 @@ import io.netty.handler.codec.http.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.io.Responses;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -23,7 +22,11 @@ public abstract class BaseController {
         this.servletContextPath = servletContextPath;
     }
 
-    public final void process(@NotNull QueryStringDecoder urlDecoder, @NotNull FullHttpRequest request, @NotNull ChannelHandlerContext context) throws IOException {
+    public final void process(
+            @NotNull QueryStringDecoder urlDecoder,
+            @NotNull FullHttpRequest request,
+            @NotNull ChannelHandlerContext context
+    ) {
         FullHttpResponse response;
         try {
             if (request.method() == HttpMethod.POST) {
@@ -36,7 +39,11 @@ public abstract class BaseController {
                 response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
             }
         } catch (Throwable t) {
-            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.INTERNAL_SERVER_ERROR, Unpooled.wrappedBuffer(t.getMessage().getBytes(StandardCharsets.UTF_8)));
+            response = new DefaultFullHttpResponse(
+                    HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                    Unpooled.wrappedBuffer(t.getMessage().getBytes(StandardCharsets.UTF_8))
+            );
         }
         Responses.send(response, context.channel(), request);
         if (response.content() != Unpooled.EMPTY_BUFFER) {
@@ -47,11 +54,19 @@ public abstract class BaseController {
         }
     }
 
-    public FullHttpResponse get(@NotNull QueryStringDecoder urlDecoder, @NotNull FullHttpRequest request, @NotNull ChannelHandlerContext context) throws IOException {
+    public FullHttpResponse get(
+            @NotNull QueryStringDecoder urlDecoder,
+            @NotNull FullHttpRequest request,
+            @NotNull ChannelHandlerContext context
+    ) {
         throw new IllegalArgumentException("Not implemented");
     }
 
-    public FullHttpResponse post(@NotNull QueryStringDecoder urlDecoder, @NotNull FullHttpRequest request, @NotNull ChannelHandlerContext context) throws IOException {
+    public FullHttpResponse post(
+            @NotNull QueryStringDecoder urlDecoder,
+            @NotNull FullHttpRequest request,
+            @NotNull ChannelHandlerContext context
+    ) {
         throw new IllegalArgumentException("Not implemented");
     }
 
@@ -99,8 +114,10 @@ public abstract class BaseController {
 
     protected Project getProject(String projectNameParameter, String projectUrlParameter) {
         for (Project project : ProjectManager.getInstance().getOpenProjects()) {
-            if ((projectNameParameter != null && projectNameParameter.equals(project.getName()))
-                    || (projectUrlParameter != null && projectUrlParameter.equals(project.getPresentableUrl()))) {
+            if (projectNameParameter != null && projectNameParameter.equals(project.getName())) {
+                return project;
+            }
+            if (projectUrlParameter != null && projectUrlParameter.equals(project.getPresentableUrl())) {
                 return project;
             }
         }
