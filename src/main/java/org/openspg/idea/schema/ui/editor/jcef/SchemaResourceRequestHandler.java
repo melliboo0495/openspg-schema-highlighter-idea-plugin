@@ -30,10 +30,10 @@ public class SchemaResourceRequestHandler extends CefResourceRequestHandlerAdapt
         try {
             return HttpRequests.request(request.getURL())
                     .throwStatusCodeException(false)
-                    .connect((HttpRequests.RequestProcessor<CefResourceHandler>) req -> {
+                    .connect(req -> {
                         SchemaResourceSupplier supplier = supplierList
                                 .stream()
-                                .filter(x -> x.isSupported(req.getURL()))
+                                .filter(x -> x.isSupported(request))
                                 .findFirst()
                                 .orElse(null);
 
@@ -41,7 +41,7 @@ public class SchemaResourceRequestHandler extends CefResourceRequestHandlerAdapt
                             return null;
                         }
 
-                        return createResourceHandler(supplier.getResource(req.getURL()));
+                        return createResourceHandler(supplier.getResource(request));
                     });
 
         } catch (IOException io) {

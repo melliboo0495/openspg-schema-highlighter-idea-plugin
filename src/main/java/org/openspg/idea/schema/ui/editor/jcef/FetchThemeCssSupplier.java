@@ -1,5 +1,6 @@
 package org.openspg.idea.schema.ui.editor.jcef;
 
+import org.cef.network.CefRequest;
 import org.jetbrains.annotations.NotNull;
 import org.openspg.idea.schema.ui.editor.ColorThemeUtils;
 import org.openspg.idea.schema.util.UIUtils;
@@ -18,12 +19,12 @@ public class FetchThemeCssSupplier extends SchemaResourceSupplier {
     }
 
     @Override
-    public boolean isSupported(@NotNull String requestUrl) {
-        return requestUrl.endsWith(RESOURCE_SCHEMA_THEME);
+    public boolean isSupported(@NotNull CefRequest request) {
+        return request.getURL().endsWith(RESOURCE_SCHEMA_THEME);
     }
 
     @Override
-    public Resource getResource(@NotNull String requestUrl) {
+    public Resource getResource(@NotNull CefRequest request) {
         return new Resource() {
             @Override
             public @NotNull String getContentType() {

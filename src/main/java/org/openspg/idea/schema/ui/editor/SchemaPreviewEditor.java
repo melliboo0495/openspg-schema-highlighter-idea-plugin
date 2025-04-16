@@ -143,4 +143,10 @@ public class SchemaPreviewEditor extends UserDataHolderBase implements FileEdito
         }
     }
 
+    public void activateEntity(@NotNull String name) {
+        if (myPanel != null) {
+            myPanel.activateEntity(name);
+        }
+    }
+
 }
