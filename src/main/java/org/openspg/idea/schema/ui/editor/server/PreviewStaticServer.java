@@ -20,15 +20,14 @@ public class PreviewStaticServer extends HttpRequestHandler {
 
     public static final String SERVLET_CONTEXT_PATH = "/";
 
-    private static final Set<HttpMethod> SUPPORTED_METHODS = Set.of(HttpMethod.GET, HttpMethod.POST, HttpMethod.HEAD);
+    private static final Set<HttpMethod> SUPPORTED_METHODS = Set.of(
+            HttpMethod.GET, HttpMethod.POST, HttpMethod.HEAD
+    );
 
     private final Map<String, BaseController> routes = new HashMap<>();
 
-    private final ResourcesController resourcesController;
-
     public PreviewStaticServer() {
-        this.resourcesController = new ResourcesController(SERVLET_CONTEXT_PATH);
-        registerController(resourcesController);
+        registerController(new ResourcesController(SERVLET_CONTEXT_PATH));
     }
 
     @Override
@@ -65,10 +64,6 @@ public class PreviewStaticServer extends HttpRequestHandler {
 
     private void registerController(BaseController controller) {
         routes.put(controller.getFullServletPath(), controller);
-    }
-
-    public ResourcesController getResourceController() {
-        return this.resourcesController;
     }
 
     public static PreviewStaticServer getInstance() {

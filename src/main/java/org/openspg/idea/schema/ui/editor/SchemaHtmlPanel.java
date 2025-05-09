@@ -15,14 +15,18 @@ import org.cef.handler.*;
 import org.cef.misc.BoolRef;
 import org.cef.network.CefRequest;
 import org.jetbrains.ide.BuiltInServerManager;
+import org.openspg.idea.lang.psi.SchemaEntity;
 import org.openspg.idea.schema.ui.editor.jcef.FetchSchemaApiSupplier;
 import org.openspg.idea.schema.ui.editor.jcef.FetchThemeCssSupplier;
+import org.openspg.idea.schema.ui.editor.jcef.FocusEntityApiSupplier;
 import org.openspg.idea.schema.ui.editor.jcef.SchemaResourceRequestHandler;
 import org.openspg.idea.schema.ui.editor.server.PreviewStaticServer;
 import org.openspg.idea.schema.ui.editor.server.ResourcesController;
 import org.openspg.idea.schema.util.EditorUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 public class SchemaHtmlPanel extends JCEFHtmlPanel {
@@ -34,11 +38,8 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
                     Urls.parseEncoded("http://localhost:" + BuiltInServerManager.getInstance().getPort()
                             + PreviewStaticServer.SERVLET_CONTEXT_PATH
                             + ResourcesController.SERVLET_PATH
-                            + "/")));
-
-    //private final Url HOME_URL = BuiltInServerManager.getInstance().addAuthToken(
-    //        Objects.requireNonNull(
-    //                Urls.parseEncoded("http://192.168.3.148:9000/")));
+                            + "/"))
+    );
 
     private final Project myProject;
     private final VirtualFile myFile;
@@ -63,7 +64,8 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
             public CefResourceRequestHandler getResourceRequestHandler(CefBrowser browser, CefFrame frame, CefRequest request, boolean isNavigation, boolean isDownload, String requestInitiator, BoolRef disableDefaultHandling) {
                 return new SchemaResourceRequestHandler(
                         new FetchSchemaApiSupplier(() -> resourceBytes),
-                        new FetchThemeCssSupplier()
+                        new FetchThemeCssSupplier(),
+                        new FocusEntityApiSupplier(SchemaHtmlPanel.this::handleEntityActivated)
                 );
             }
         }, getCefBrowser());
@@ -100,6 +102,7 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
         }
     }
 
+
     @Override
     public void dispose() {
         getJBCefClient().removeRequestHandler(requestHandler, getCefBrowser());
@@ -112,6 +115,20 @@ public class SchemaHtmlPanel extends JCEFHtmlPanel {
         loadResourceFile();
         String script = "document.getElementById('schema-diagram-refresh-button').click();";
         getCefBrowser().executeJavaScript(script, getCefBrowser().getURL(), 0);
+    }
+
+    public void activateEntity(String name) {
+        String base64Name = Base64.getEncoder().encodeToString(name.getBytes(StandardCharsets.UTF_8));
+        String script = "window.activeEntityName='" + base64Name + "';\n"
+                + "document.getElementById('schema-diagram-active-entity-button').click();";
+        getCefBrowser().executeJavaScript(script, getCefBrowser().getURL(), 0);
+    }
+
+    private Boolean handleEntityActivated(List<SchemaEntity> entities) {
+        for (SchemaEntity entity : entities) {
+            System.out.println(entity.getName());
+        }
+        return true;
     }
 
     public void updateStyle() {

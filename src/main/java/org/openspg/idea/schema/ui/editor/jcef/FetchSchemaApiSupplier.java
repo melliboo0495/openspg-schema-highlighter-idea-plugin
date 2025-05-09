@@ -1,12 +1,13 @@
 package org.openspg.idea.schema.ui.editor.jcef;
 
+import org.cef.network.CefRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class FetchSchemaApiSupplier extends SchemaResourceSupplier {
 
-    public static final String API_SCHEMA_FETCH = "schema/fetch";
+    private static final String API_SCHEMA_FETCH = "schema/fetch";
 
     private final Supplier<byte[]> supplier;
 
@@ -15,12 +16,12 @@ public class FetchSchemaApiSupplier extends SchemaResourceSupplier {
     }
 
     @Override
-    public boolean isSupported(String requestUrl) {
-        return requestUrl.endsWith(API_SCHEMA_FETCH);
+    public boolean isSupported(@NotNull CefRequest request) {
+        return request.getURL().endsWith(API_SCHEMA_FETCH);
     }
 
     @Override
-    public Resource getResource(@NotNull String requestUrl) {
+    public Resource getResource(@NotNull CefRequest request) {
         return new Resource() {
             @Override
             public @NotNull String getContentType() {

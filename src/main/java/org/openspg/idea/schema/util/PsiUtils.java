@@ -17,13 +17,22 @@ import java.util.stream.Collectors;
 
 public class PsiUtils {
 
-    public static @NotNull List<PsiElement> searchChildrenOfAnyType(@NotNull PsiElement psiRoot, boolean recursion, IElementType @NotNull ... types) {
+    public static @NotNull List<PsiElement> searchChildrenOfAnyType(
+            @NotNull PsiElement psiRoot,
+            boolean recursion,
+            IElementType @NotNull ... types
+    ) {
         List<PsiElement> results = new ArrayList<>();
         searchChildrenOfAnyType(results, psiRoot, recursion, types);
         return results;
     }
 
-    private static void searchChildrenOfAnyType(@NotNull List<PsiElement> result, @NotNull PsiElement psiRoot, boolean recursion, IElementType @NotNull ... types) {
+    private static void searchChildrenOfAnyType(
+            @NotNull List<PsiElement> result,
+            @NotNull PsiElement psiRoot,
+            boolean recursion,
+            IElementType @NotNull ... types
+    ) {
         PsiElement psiChild = psiRoot.getFirstChild();
         while (psiChild != null) {
             IElementType childType = psiChild.getNode().getElementType();
@@ -41,7 +50,10 @@ public class PsiUtils {
         }
     }
 
-    public static String readPlainTextAfterNode(@NotNull PsiElement element, @NotNull IElementType nodeType) {
+    public static String readPlainTextAfterNode(
+            @NotNull PsiElement element,
+            @NotNull IElementType nodeType
+    ) {
         ASTNode node = element.getNode().findChildByType(nodeType);
         if (node == null) {
             return null;
